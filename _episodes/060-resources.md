@@ -1,15 +1,15 @@
 ---
 title: "Using resources effectively"
-teaching: 15
+teaching: 20
 exercises: 10
 questions:
 - "How do we monitor our jobs?"
-- "How can I get my jobs scheduled more easily?" 
+- "How can I get my jobs scheduled more easily and improve throughput?" 
 objectives:
-- "Understand how to look up job statistics and profile code."
+- "Understand how to look up job statistics."
 - "Understand job size implications."
 keypoints:
-- "The smaller your job, the faster it will schedule."
+- "The better your resource request estimates, the better throughput you will see."
 ---
 
 We now know virtually everything we need to know about getting stuff on a cluster.

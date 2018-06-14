@@ -1,13 +1,13 @@
 ---
-title: "Using resources effectively"
-teaching: 10
+title: "Using shared resources responsibly"
+teaching: 15
 exercises: 5
 questions:
-- "How can I be a responsible cluster user?"
+- "How can I be a responsible user?"
 objectives:
-- "Be a good person and be nice to other users."
+- "Learn how to be a considerate shared system citizen."
 keypoints:
-- "Don't run stuff on the login node."
+- "Be careful how you use the login node."
 - "Again, don't run stuff on the login node."
 - "Don't be a bad person and run stuff on the login node."
 ---

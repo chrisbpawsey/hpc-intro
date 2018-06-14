@@ -1,14 +1,14 @@
 ---
 title: "Connecting to the cluster"
-teaching: 15 
+teaching: 10 
 exercises: 5
 questions:
 - "How do I open a terminal?"
 - "How do I connect to a remote computer?"
 objectives:
-- "Connect to a cluster."
+- "Succesfully connect to a remote HPC system."
 keypoints:
-- "To connect to a cluster using SSH: `ssh yourUsername@remote.computer.address`"
+- "To connect to a remote HPC system using SSH: `ssh yourUsername@remote.computer.address`"
 ---
 
 ## Opening a Terminal

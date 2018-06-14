@@ -6,11 +6,11 @@ questions:
 - "How do we load and unload software packages?"
 objectives:
 - "Understand how to load and use a software package."
+- "Understand how to use modules to load software packages in scheduler job scripts."
 keypoints:
 - "Load software with `module load softwareName`"
-- "Unload software with `module purge`"
 - "The module system handles software versioning and package conflicts for you automatically."
-- "You can edit your `.bashrc` file to automatically load a software package."
+- "Loading modules must also be done in scheduler job scripts."
 ---
 
 On a high-performance computing system, no software is loaded by default.

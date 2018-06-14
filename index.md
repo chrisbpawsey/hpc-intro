@@ -3,22 +3,18 @@ layout: lesson
 root: .
 ---
 
-This workshop is an introduction to using high-performance computing systems effectively.
-We obviously can't cover every case or give an exhaustive course on parallel programming in just two days' of teaching time.
-Instead, this workshop is intended to give students a good introduction and overview of the tools available and how to use them effectively.
+This course provides an introduction to High Performance Computing (HPC). After completing this course, participants will:
 
-By the end of this workshop, students will know how to:
-
-* Use the UNIX command line to operate a computer, connect to a cluster, and write simple shell scripts.
-* Submit and manage jobs on a cluster using a scheduler, transfer files, and use software through environment modules.
-* Learn the fundamentals of programming in Python or Chapel.
-* Understand parallel programming strategies, and write basic parallel code in Python or Chapel. 
-
-**NOTE: This is the draft HPC Carpentry release. Comments and feedback are welcome.** 
+* Understand motivations for using HPC in research
+* Understand how HPC systems are put together to achieve performance and how they differ from desktops/laptops
+* Know how to connect to remote HPC systems and transfer data
+* Know how to use a scheduler to work on a shared system
+* Be able to use software modules to access different HPC software
+* Be able to work effectively on a remote shared resource
 
 > ## Prerequisites
 >
-> There are no real prerequisites for this lesson, 
-> but prior programming and/or command line experience will be helpful.
+> You need to have previous experience working with the Unix Shell. For a brief introduction to bash, you can refer to the [Software Carpentry material available online](http://swcarpentry.github.io/shell-novice/). You don't need to have any previous knowledge of the tools that will be presented at the workshop.
+>
 {: .prereq}
 

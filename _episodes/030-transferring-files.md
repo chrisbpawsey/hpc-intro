@@ -1,11 +1,11 @@
 ---
 title: "Transferring files"
-teaching: 30
+teaching: 20
 exercises: 10
 questions:
-- "How do I upload/download files to the cluster?"
+- "How do I upload/download files to/from a remote HPC system?"
 objectives:
-- "Be able to tranfer files to and from a computing cluster."
+- "Be able to tranfer files to and from a remote HPC system."
 keypoints:
 - "`wget` downloads a file from the internet."
 - "`sftp`/`scp` transfer files to and from your computer."

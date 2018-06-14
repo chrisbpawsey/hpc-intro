@@ -1,17 +1,18 @@
 ---
-title: "Why Use a Cluster?"
+title: "Why use High Performance Computing?"
 teaching: 15
 exercises: 5
+start: true
 questions:
 - "Why would I be interested in High Performance Computing (HPC)?"
 - "What can I expect to learn from this course?"
 objectives:
-- "Be able to describe what an HPC system is"
-- "Identify how an HPC system could benefit you."  
+- "Be able to describe what HPC systems are typically used for"
+- "Identify how an HPC system could potentially benefit you."  
 keypoints:
-- "High Performance Computing (HPC) typically involves connecting to very large computing systems elsewhere in the world."
-- "These other systems can be used to do work that would either be impossible or much slower or smaller systems."
-- "The standard method of interacting with such systems is via a command line interface called Bash."
+- "High Performance Computing (HPC) is a tool to calculate faster or larger than is possible on your own system."
+- "HPC relies on using parallelism to provide performance improvements."
+- "HPC typically involves connecting to very large computing systems elsewhere in the world."
 ---
 
 ## Why Use These Computers?

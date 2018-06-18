@@ -22,6 +22,10 @@ keypoints:
 > Talk to your neighbor about your research.  How does computing
 > help you do your research?  How could more computing help you
 > do more or better research?  
+>
+> Summarise your discussion in 2-3 sentances in the Etherpad.
+> 
+> This discussion should take about 5 minutes
 {: .challenge}
 
 Frequently, research problems that use computing can outgrow the desktop
@@ -45,17 +49,37 @@ In all these cases, what is needed is access to more computers than can be
 used at the same time.  Luckily, large scale computing systems -- shared computing
 resources with lots of computers -- are available at many universities, labs,
 or through national networks.  These resources usually have
-more central processing units(CPUs), CPUs that operate at higher speeds,
-more memory, more storage, and
-faster connections with other computer systems.  They are frequently called
+more processors, that operate at higher speeds, more memory, more storage, and
+faster connections with other computer systems.  They are often interchangably called
 "clusters", "supercomputers" or resources for "high performance computing" or
-HPC.  In this lesson, we will usually use the terminology of HPC and HPC cluster.  
+HPC.  In this lesson, we will usually use the terminology HPC but it is useful 
+to define these terms a little bit more in case you come across them in future.
 
-Using a cluster often has the following advantages for researchers:
+* **High Performance Computing (HPC).** Computing resources that allow people to 
+solve their problems faster or treat larger problems than they would be able to
+using standard computing resources (e.g. a laptop, desktop or workstation). Usually
+implies some sort of *parallel computing*.
+* **Parallel Computing.** The use of computing resources in parallel to speed up
+computation or treat larger computational problems.
+* **Supercomputer.** Typically used to describe a very large HPC resource such
+as those found on the [Top500](http://www.top500.org) list.
+* **High Throughput Computing (HTC).** A subset of parallel computing where 
+computing resources are used in parallel on many independent sub-tasks to increase
+the rate at which computation can be performed. For example, varying an imput 
+parameter (or input data) to a computation and running many copies simultaneously.
+* **Cloud Computing.** Using remote computing resources *on demand*. Often associated 
+with using public cloud computing resources provided by large internet corporations.
 
-* **Speed.** With many more CPU cores, often with higher performance specs,
-  than a typical laptop or desktop, HPC systems can offer
-  significant speed up.
+> ## HPC is parallel computing
+> Although HPC systems often have slightly more powerful processors, more memory and
+> more storage the real additional power comes from using the resources in parallel
+> rather than in serial.
+{: .callout}
+
+Using an HPC system often has the following advantages for researchers:
+
+* **Speed.** With many more processing cores, often with higher performance specs,
+  than a typical laptop or desktop, HPC systems can offer significant speed up.
 * **Volume.** Many HPC systems have both the processing memory (RAM) and disk
   storage to handle very large amounts of data. Terabytes of RAM and
   petabytes of storage are available for research projects.
@@ -69,15 +93,16 @@ Using a cluster often has the following advantages for researchers:
   otherwise inconvenient to run on your personal computer. There's no need to
   tie up your own computer for hours when you can use someone else's instead.
 
-This is how a large-scale compute system like a cluster can help solve problems like
-those listed at the start of the lesson.  
-
 > ## Thinking ahead
 >
 > How do you think using a large-scale computing system will be different
 > from using your laptop? Talk to your neighbor about some
 > differences you may already know about, and some
 > differences/difficulties you imagine you may run into.
+>
+> Summarise your discussion in 2-3 sentances in the Etherpad.
+> 
+> This discussion should take about 5 minutes
 {: .challenge}
 
 ## On Command Line
@@ -116,17 +141,29 @@ rather than something visual like a graph.  However, using a command line
 interface can be extremely powerful, and learning how to use one will allow
 you to reap the benefits described above.  
 
+> ## You interact with HPC systems through a command line interface
+> Most interaction with HPC systems is through a command line interface, usually the
+> bash shell.
+{: .callout}
+
+
 ## The rest of this lesson
 
-The only way to use these types of resources is by learning to use the command line.
-This introduction to HPC systems has two parts:
+The rest of this lesson will cover the following topics
 
-* We will learn to use the UNIX command line (also known as Bash).
-* We will use our new Bash skills to connect to and operate a high-performance computing supercomputer.
+* We will learn how HPC systems are put together and what this means for you, as an HPC user.
+* We will learn how to access a remote HPC system from the bash command line interface and transfer 
+  data to and from the remote system.
+* We will learn how to use the scheduler on the system to get our calculations up and running on the
+  HPC systems.
+* We will learn how to access software installed on the HPC system using environment modules.
+* We will learn about how parallelism enables larger, faster computation using HPC systems.
+* We will learn how we can improve the efficiency of our use of HPC systems.
+* We will learn what the future holds for HPC and what this might mean for your use of HPC.
 
 The skills we learn here have other uses beyond just HPC -
-Bash and UNIX skills used everywhere, be it for web development, running software, or operating servers.
+Bash and remote connection skills are used everywhere, be it for web development, running software, or operating servers.
 It's become so essential that Microsoft
 [now ships it as part of Windows](https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6)!
 Knowing how to use Bash and HPC systems will allow you to operate virtually any modern device.
-Wit all of this in mind, let's connect to a cluster and get started!
+With all of this in mind, let's get started!

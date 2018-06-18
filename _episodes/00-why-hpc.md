@@ -1,7 +1,7 @@
 ---
 title: "Why use High Performance Computing?"
-teaching: 15
-exercises: 5
+teaching: 20
+exercises: 10
 start: true
 questions:
 - "Why would I be interested in High Performance Computing (HPC)?"

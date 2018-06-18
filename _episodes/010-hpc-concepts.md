@@ -38,7 +38,6 @@ Depending on the HPC system, the compute nodes, even individually, might be much
 
 Each node on an HPC system is essentially an individual computer:
 
-
 ![Generic node structure](../fig/node_diagram.png)
 
 The *processor* contains multiple *compute cores* (usually shortened to *core*); 4 in the diagram above. Each core contains a *floating point unit (FPU)* which is responsible for actually performning the computations on the data and various fast *memory caches* which are responsible for holding data that is currently being worked on. The compute power of a processor generally depends on three things:
@@ -53,8 +52,7 @@ Each node also has a certain amount of *memory* available (also referred to as *
 
 Finally, each node also has access to *storage* (also called *disk* or *file system*) for persistent storage of data. As we shall see later, this storage is often shared across all nodes and there are often multiple different types of storage connected to a node.
 
-
-## The Scheduler
+## The Scheduler
 
 In order to share these large systems among many users, it is common to allocate subsets of the compute nodes to tasks (or *jobs*), based on requests from users.  These jobs may take a long time to complete, so they come and go in time. To manage the sharing of the compute nodes among all of the jobs, HPC systems use a *batch system* or *scheduler*.  The batch system usually has commands for submitting jobs, inquiring about their status, and modifying them.  The HPC center defines the priorities of different jobs for execution on the compute nodes, while ensuring that the compute nodes are not overloaded.
 
@@ -68,13 +66,13 @@ For example, a typical HPC workflow could look something like this:
 
 We will discuss the scheduler more later.
 
-## Storage and *File Systems*
+## Storage and *File Systems*
 
 The kind of computing that people do on HPC systems often involves very large files, and/or many of them.  Further, the files have to be accessible from all of the front-end and compute nodes on the system.  So most HPC systems have specialized file systems that are designed to meet these needs. Frequently, these specialized file systems are intended to be used only for short- or medium-term storage, not permanent storage.  As a consequence of this, most HPC systems often have several different file systems available -- for example *home*, and *scratch* file systems.  It can be very important to select the right file system to get the results you want (performance or permanence are the typical trade-offs).
 
 Your instructor will provide details of the file systems that are available on the HPC system you are using for this lesson.
 
-## Accessing Software on HPC Systems
+## Accessing Software on HPC Systems
 
 Because HPC systems serve many users with different software needs, HPC systems often have multiple versions of commonly used software packages installed.  Since you cannot easily install and use different versions of a package at the same time without causing potential issues, HPC systems often use *environment modules* (often shortened to *modules*) that allow you to configure your software environment with the particular versions of software that you need. We will learn more about modules and how they work later in this lesson.
 

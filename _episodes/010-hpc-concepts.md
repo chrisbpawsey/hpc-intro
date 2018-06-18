@@ -34,6 +34,26 @@ Depending on the HPC system, the compute nodes, even individually, might be much
 > Each individual "computer" component of an HPC system is known as a *node*. Different types of node exist for different tasks. The nodes are connected together by a network usually known as the *interconnect*.
 {: .callout}
 
+## Nodes
+
+Each node on an HPC system is essentially an individual computer:
+
+
+![Generic node structure](../fig/node_diagram.png)
+
+The *processor* contains multiple *compute cores* (usually shortened to *core*); 4 in the diagram above. Each core contains a *floating point unit (FPU)* which is responsible for actually performning the computations on the data and various fast *memory caches* which are responsible for holding data that is currently being worked on. The compute power of a processor generally depends on three things:
+
+* The speed of the processor (2-3 GHz are common speeds on modern processors)
+* The power of the floating point unit (generally the more modern the processor, the more powerful the FPU is)
+* The number of cores available (12-16 cores are typical on modern processors)
+
+Often, HPC nodes have multiple processors (usually 2 processors per node) so the number of cores available on a node is doubled (i.e. 24-26 cores per node, rather than 12-16 cores per node). This configuration can have implications for performance.
+
+Each node also has a certain amount of *memory* available (also referred to as *RAM* or *DRAM*) in addtion to the processor memory caches. Modern compute nodes typically have in the range 64-256 GB of memory per node.
+
+Finally, each node also has access to *storage* (also called *disk* or *file system*) for persistent storage of data. As we shall see later, this storage is often shared across all nodes and there are often multiple different types of storage connected to a node.
+
+
 ## The Scheduler
 
 In order to share these large systems among many users, it is common to allocate subsets of the compute nodes to tasks (or *jobs*), based on requests from users.  These jobs may take a long time to complete, so they come and go in time. To manage the sharing of the compute nodes among all of the jobs, HPC systems use a *batch system* or *scheduler*.  The batch system usually has commands for submitting jobs, inquiring about their status, and modifying them.  The HPC center defines the priorities of different jobs for execution on the compute nodes, while ensuring that the compute nodes are not overloaded.
@@ -78,7 +98,28 @@ A few properties of HPC systems mean that you often need to modify your computat
   - You usually need to be able to use resources in parallel to benefit from HPC
   - This parallelism can be achieved in a number of ways: from many independent tasks (HTC) to a single large parallel computation
 
-Understanding more about how HPC systems work and achieve high performance will allow you to appreciate better the opportunities and challenges for using HPC for your research.
+## ...and what about Performance
+
+The "P" in HPC does stand for performance and the make up of an HPC system is designed to allow researchers to access higher performance (or capabilities) than they could on their local systems. The way in which an HPC system is put together does have an impact on performance and workfows are often categorised according to which part of the HPC system constrains their performance. You may see the following terms used to describe performance on an HPC system:
+
+* Compute bound. The performance of the workflow is limited by the floating point (FPU) performance of the nodes. This is typically seen when peforming math-heavy operations such as diagonalising matrices in computational chemistry software or computing pairwise force interactions in biomolecular simulations.
+* Memory bound. The performance of the workflow is limited by access to memory (usually in terms of *bandwidth*: how much data can you access at one time). Almost all current HPC applications have a part of their workflow that is memory bound. A typical example of a memory bound application would be something like computational fluid dynamics.
+* I/O bound. The performance of the workflow is limited by access to storage (usually in terms of bandwidth but sometimes in terms of numbers of files being accessed simultaneously). This is often seen in climate modelling and bioinformatics workflows.
+* Communication bound. The performance of the workflow is limited by how quickly the parallel tasks can exchange information across the interconnect. This is often seen when single applications scale out to very large numbers of nodes and the amount of traffic flowing across the interconnect becomes high. Particular common algorithms, such as multidimensional Fourier transformations, can also exhibit this behaviour.
+
+In reality, most research workflows exhibit many of these bottlenecks at different points in their execution.
+
+> ## What is limiting me?
+> Think about a research workflow you use. Discuss this with your neighbor. Can you identify which of the bottlenecks described above may apply to your workflow?
+>
+> Identify 1 of these bottlenecks in the Etherpad and explain why you think it applies to your workflow.
+>
+> This activity should take about 5 minutes.
+{: .challenge}
+
+# Why all this conceptual stuff?
+
+Understanding more about how HPC systems work and achieve high performance will allow you to appreciate better the opportunities and challenges for using HPC for your research and also give you the tools required to help yourself out if (when!) you run into problems with using HPC systems in the future;.
 
 Now lets get going and actually connect to an HPC system!
 

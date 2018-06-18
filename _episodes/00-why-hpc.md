@@ -55,20 +55,14 @@ faster connections with other computer systems.  They are often interchangably c
 HPC.  In this lesson, we will usually use the terminology HPC but it is useful 
 to define these terms a little bit more in case you come across them in future.
 
-* **High Performance Computing (HPC).** Computing resources that allow people to 
-solve their problems faster or treat larger problems than they would be able to
-using standard computing resources (e.g. a laptop, desktop or workstation). Usually
-implies some sort of *parallel computing*.
-* **Parallel Computing.** The use of computing resources in parallel to speed up
-computation or treat larger computational problems.
-* **Supercomputer.** Typically used to describe a very large HPC resource such
-as those found on the [Top500](http://www.top500.org) list.
-* **High Throughput Computing (HTC).** A subset of parallel computing where 
-computing resources are used in parallel on many independent sub-tasks to increase
-the rate at which computation can be performed. For example, varying an imput 
-parameter (or input data) to a computation and running many copies simultaneously.
-* **Cloud Computing.** Using remote computing resources *on demand*. Often associated 
-with using public cloud computing resources provided by large internet corporations.
+* **High Performance Computing (HPC).** Computing resources that allow people to solve their problems faster or treat larger problems than they would be able to using standard computing resources (e.g. a laptop, desktop or workstation). Usually implies some sort of *parallel computing*.
+* **Parallel Computing.** The use of computing resources in parallel to speed up computation or treat larger computational problems.
+* **Supercomputer.** Typically used to describe a very large HPC resource such as those found on the [Top500](http://www.top500.org) list. Often uses the same technology as *compute clusters* but at a larger scale.
+* **Compute Cluster.** Typically used to describe a smaller HPC resource than those referred to as *supercomputers*. Usually use exactly the same technology as supercomputers but on a smaller scale.
+* **High Throughput Computing (HTC).** A subset of parallel computing where computing resources are used in parallel on many independent sub-tasks to increase the rate at which computation can be performed. For example, varying an imput parameter (or input data) to a computation and running many copies simultaneously.
+* **Cloud Computing.** Using remote computing resources *on demand*. Often associated with using public cloud computing resources provided by large internet corporations.
+
+All of the topics covered in this lesson will be useful no matter which type of resource you are planning to use and in which way. 
 
 > ## HPC is parallel computing
 > Although HPC systems often have slightly more powerful processors, more memory and

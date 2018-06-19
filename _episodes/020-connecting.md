@@ -188,103 +188,111 @@ the following convention:
 Now we can log into the Cirrus HPC system we will look at the nodes. You should remember that there 
 are at least two  types of node on the system: *login nodes* and *compute nodes*.
 
-The real work on a cluster gets done by the *worker* (or *execute*) *nodes*
-Worker nodes come in many shapes and sizes,
-but generally are dedicated to doing all of the heavy lifting that needs doing.
-
-All interaction with the worker nodes is handled by a specialized piece of software called a scheduler
-(the scheduler used in this lesson is called SLURM).  We'll learn more about how to use 
-the scheduler to submit jobs next, but for now, it can also tell us more information about 
-the worker nodes.  
-
-For example, we can view all of the worker nodes with the `sinfo` command.
+We can use the ``/proc`` file system to examine what the hardware looks like on the login node. Use 
+the ``cat`` command to print information on the processors on the login nodes to the terminal:
 
 ```
-[remote]$ sinfo
+[remote]$ cat /proc/cpuinfo
 ```
 {: .bash}
 ```
-PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
-compute*     up 7-00:00:00      1 drain* gra259
-compute*     up 7-00:00:00     11  down* gra[8,99,211,268,376,635,647,803,852,966,986]
-compute*     up 7-00:00:00      1   drng gra272
-compute*     up 7-00:00:00     31   comp gra[988-991,994-1002,1006-1007,1015,1017,1021-1022,1028-1033,1037-1041,1043]
-compute*     up 7-00:00:00     33  drain gra[225-251,253-256,677,1026]
-compute*     up 7-00:00:00    323    mix gra[7,13,25,41,43-44,56,58-77,107-108,112-113,117,125-126,163,168-169,173,180-203,205-210,220,224,257-258,300-317,320,322-349,385-387,398,400-428,448,452,460,528-529,540-541,565-601,603-606,618,622-623,628,643-646,652,657,660,665,678-699,710-711,713-728,734-735,737,741-751,753-755,765,767,774,776,778,796-798,802,805-812,827,830,832,845-846,853,856,865-866,872,875,912,914,916-917,925,928,930,934,953-954,959-960,965,969-971,973,1004,1008-1009,1011,1013-1014,1023-1025]
-compute*     up 7-00:00:00    464  alloc gra[1-6,9-12,14-19,21-24,26-40,42,45-55,57,100-106,109-111,114-116,118-122,127,164-167,174-179,204,212-219,221-223,252,260-267,269-271,273-284,318-319,321,350-375,377-384,388-397,399,453-459,461-501,526-527,530-539,542-564,607-608,629-634,636-642,648-651,653-656,658-659,661-664,666-676,700-703,738,756-764,766,768-773,804,813-826,828-829,831,833-844,847-851,854-855,857-864,867-871,873-874,876-911,913,915,918-924,926-927,929,931-933,935-936,938-952,955-958,961-964,967-968,972,974-985,987,992-993,1003,1005,1010,1012,1016,1018-1020,1027,1034-1036,1042]
-compute*     up 7-00:00:00    176   idle gra[78-98,123-124,128-162,170-172,285-299,429-447,449-451,502-525,602,609-617,619-621,624-627,704-709,712,729-733,736,739-740,752,775,777,779-795,799-800]
-compute*     up 7-00:00:00      3   down gra[20,801,937]
+
+processor	: 71
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 79
+model name	: Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz
+stepping	: 1
+microcode	: 0xb000010
+cpu MHz		: 1199.707
+cache size	: 46080 KB
+physical id	: 1
+siblings	: 36
+core id		: 27
+cpu cores	: 18
+apicid		: 119
+initial apicid	: 119
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 20
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer xsave avx f16c rdrand lahf_lm abm 3dnowprefetch ida arat epb pln pts dtherm tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdseed adx smap xsaveopt cqm_llc cqm_occup_llc
+bogomips	: 4205.47
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 46 bits physical, 48 bits virtual
+power management:
 ```
 {: .output}
 
-There are also specialized machines used for managing disk storage, user authentication,
-and other infrastructure-related tasks.
-Although we do not typically logon to or interact with these machines directly,
-they enable a number of key features like ensuring our user account and files are available throughout the cluster.
-This is an important point to remember:
-files saved on one node (computer) are available everywhere on the cluster!
+The text above just shows a fragment of the output giving information on a single core of the 
+login node. We can get some useful information from this output:
 
-## What's in a node? 
+* The processor model is:  Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz (you could use [Intel Ark](http://ark.intel.com) along with the model number to get more information if you wanted)
+* There are 18 cores per processor: ``cpu cores	: 18``
+* There are two processors per node: ``physical id	: 1`` (numbering starts at zero and this is the last entry so there are two processors at most)
 
-All of a cluster's nodes have the same components as your own laptop or desktop:
-*CPUs* (sometimes also called
-  *processors* or *cores*), *memory* (or *RAM*), and *disk* space.  
-  CPUs are a computer's tool for actually running programs and calculations.
-  Information about a current task is stored in the computer's memory.  Disk
-  is a computer's long-term storage for information it will need later.
+We can extract information about the amount of memory available in a similar way. In this case we only want the first line as it will give
+us the total amount of memory available so we use the ``head -1`` command:
 
-> ## Explore Your Computer
->
-> Try to find out the number of CPUs and amount of memory available on your 
-> personal computer.  
-{: .challenge}
+```
+[remote]$ head -1 /proc/meminfo
+```
+{: .bash}
+```
+MemTotal:       263772152 kB
+```
+{: .output}
 
-> ## Explore The Head Node
->
-> Now we'll compare the size of your computer with the size of the head node: 
-> To see the number of processors, run: 
-> ```
-> nproc --all
-> ```
-> {: .bash}
-> or 
-> ```
-> cat /proc/cpuinfo
-> ```
-> {: .bash}
-> to see full details.  
-> 
-> How about memory? Try running: 
-> ```
-> free -m
-> ```
-> {: .bash}
-> or for more details: 
-> ```
-> cat /proc/meminfo free -m
-> ```
-> {: .bash}
-{: .challenge}
-
-> ## Explore a Worker Node
-> 
-> Finally, let's look at the resources available on the worker nodes where your jobs 
-> will actually run.  
-> Try running this command to see the name, CPUs and memory available on the worker nodes: 
-> ```
-> sinfo -n aci-377 -o "%n %c %m"
-> ```
-> {: .bash}
-{: .challenge}
+This tells us that there are 252 GB of memory available (this is out of 256 GB, ~4GB are reserved for various parts of computing hardware.
 
 > ## Units
 > 
 > A computer's memory and disk are measured in units called *bytes*.  The magnitude 
 > of a file or memory use is measured using the same prefixes of the metric system: 
-> kilo, mega, giga, tera.  So 1024 bytes is a kilobyte, 1024 kilobytes is a megabyte, 
+> kilo, mega, giga, tera.  So 1000 bytes is a kilobyte (kB), 1000 kilobytes is a megabyte (MB), 
 > and so on.  
 >
+> You may also see units that use multiples of 1024 rather than 1000. So, 1024 bytes is a 
+> kibibyte (KiB), 1024 KiB is a mebibyte (MiB), 1024 MiB is a gibibyte (GiB) and so on. For
+> low amounts of storage the differences between these two units are negligible but as the
+> size increases the differences can be significant.
 {: .callout}
 
-With all of this in mind, we will now cover how to talk to the cluster's scheduler,
-and use it to start running our scripts and programs!
+We can now repeat this for the compute nodes. All interaction with the compute nodes is handled by a specialized piece of software called a scheduler
+(the scheduler used in this lesson is called PBS Pro).  We will learn more about how to use 
+the scheduler to submit jobs later, but for now, will use it to tell us more information about 
+the compute nodes and what is available.  
+
+We are going to repeat the commands above on a compute node. To do this, we will run an *interactive job* which will give
+us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler:
+
+```
+[remote]$ qsub -I -l select=1 -A z04
+```
+{: .bash}
+```
+qsub: waiting for job 316267.indy2-login0 to start
+qsub: job 316267.indy2-login0 ready
+
+[compute ~]$
+```
+{: .output}
+
+You should see your prompt change to indicate that your shell is now on a compute node rather than a login node.
+
+> ## Differences on the compute node?
+> Use the commands you saw above to determine if there are any differences between the processors and
+> memory available on the compute node compared to the login node.
+>
+> Is the answer what you expected?
+{: .challenge}
+
+> ## Explore your local computer
+>
+> Try to find out the processor and memory details on your own computer. How do these differ from the 
+> hardware available on the HPC system?
+{: .challenge}
+
+Now we know how to connect to the HPC system we will next learn how to transfer data on and off the system.
+

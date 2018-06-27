@@ -3,6 +3,7 @@ layout: lesson
 root: .
 ---
 
+
 ## Location, Time, Dates
 
 * Room 7.79, [EC Stoner Building](https://goo.gl/maps/5V8cXDY78Fr), University of Leeds, UK

@@ -3,14 +3,6 @@ layout: lesson
 root: .
 ---
 
-
-### Location, Time, Dates
-
-* Room 7.79, [EC Stoner Building](https://goo.gl/maps/5V8cXDY78Fr), University of Leeds, UK
-* 10:00-16:30 BST, Wed 25, Thu 26 June 2018
-
-## Overview
-
 This course provides an introduction to High Performance Computing (HPC). After completing this course, participants will:
 
 * Understand motivations for using HPC in research
@@ -27,6 +19,11 @@ This course is being run with support from the [ARCHER National Supercomputing S
 > You need to have previous experience working with the Unix Shell. For a brief introduction to bash, you can refer to the [Software Carpentry material available online](http://swcarpentry.github.io/shell-novice/). You don't need to have any previous knowledge of the tools that will be presented at the workshop.
 >
 {: .prereq}
+
+### Location, Time, Dates
+
+* Room 7.79, [EC Stoner Building](https://goo.gl/maps/5V8cXDY78Fr), University of Leeds, UK
+* 10:00-16:30 BST, Wed 25, Thu 26 June 2018
 
 ### Requirements
 

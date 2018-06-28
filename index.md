@@ -23,7 +23,7 @@ This course is being run with support from the [ARCHER National Supercomputing S
 ### Location, Time, Dates
 
 * Room 7.79, [EC Stoner Building](https://goo.gl/maps/5V8cXDY78Fr), University of Leeds, UK
-* 10:00-16:30 BST, Wed 25, Thu 26 June 2018
+* 10:00-16:30 BST, Wed 25, Thu 26 July 2018
 
 ### Requirements
 

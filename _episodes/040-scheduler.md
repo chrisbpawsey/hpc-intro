@@ -33,8 +33,8 @@ On an HPC system, the scheduler manages which jobs run where and when.
 > [Notes for the instructor here](../guide)
 {: .challenge}
 
-The scheduler used in this lesson is SLURM.
-Although SLURM is not used everywhere, 
+The scheduler used in this lesson is PBS Pro.
+Although PBS Pro is not used everywhere, 
 running jobs is quite similar regardless of what software is being used.
 The exact syntax might change, but the concepts remain the same.
 
@@ -51,7 +51,7 @@ Let's create a demo shell script to run as a test.
 > ## Creating our test job
 > 
 > Using your favorite text editor, create the following script and run it.
-> Does it run on the cluster or just our login node?
+> Does it run on the compute nodes or the login node?
 >
 >```
 >#!/bin/bash
@@ -65,24 +65,25 @@ Let's create a demo shell script to run as a test.
 If you completed the previous challenge successfully, 
 you probably realize that there is a distinction between 
 running the job through the scheduler and just "running it".
-To submit this job to the scheduler, we use the `sbatch` command.
+To submit this job to the scheduler, we use the ``qsub`` command
+(assuming our script is called *example-job.sh*):
 
 ```
-[remote]$ sbatch example-job.sh
+[remote]$ qsub example-job.sh
 ```
 {: .bash}
 ```
-Submitted batch job 36855
+318747.indy2-login0
 ```
 {: .output}
 
 And that's all we need to do to submit a job.  Our work is done -- now the 
 scheduler takes over and tries to run the job for us.  While the job is waiting 
 to run, it goes into a list of jobs called the *queue*.  
-To check on our job's status, we check the queue using the command `squeue`.
+To check on our job's status, we check the queue using the command ``qstat``.
 
 ```
-[remote]$ squeue -u yourUsername
+[remote]$ qstat -u yourUsername
 ```
 {: .bash}
 ```
@@ -93,23 +94,23 @@ S
 ```
 {: .output}
 
-We can see all the details of our job, most importantly that it is in the "R" or "RUNNING" state.
-Sometimes our jobs might need to wait in a queue ("PENDING") or have an error.
-The best way to check our job's status is with `squeue`.
-Of course, running `squeue` repeatedly to check on things can be a little tiresome.
-To see a real-time view of our jobs, we can use the `watch` command.
-`watch` reruns a given command at 2-second intervals. 
+We can see all the details of our job, most importantly that it is in the "R" (Running) state.
+Sometimes our jobs might need to wait in a queue, "Q" (Queued) state or have an error.
+The best way to check our job's status is with ``qstat``.
+Of course, running ``qstat`` repeatedly to check on things can be a little tiresome.
+To see a real-time view of our jobs, we can use the ``watch`` command.
+``watch`` reruns a given command at 2-second intervals. 
 Let's try using it to monitor another job.
 
 ```
-[remote]$ sbatch example-job.sh
-[remote]$ watch squeue -u yourUsername
+[remote]$ qsub example-job.sh
+[remote]$ watch qtat -u yourUsername
 ```
 {: .bash}
 
 You should see an auto-updating display of your job's status.
 When it finishes, it will disappear from the queue.
-Press `Ctrl-C` when you want to stop the `watch` command.
+Press ``Ctrl-C`` when you want to stop the ``watch`` command.
 
 ## Customizing a job
 
@@ -124,21 +125,21 @@ Comments in UNIX (denoted by `#`) are typically ignored.
 But there are exceptions.
 For instance the special `#!` comment at the beginning of scripts
 specifies what program should be used to run it (typically `/bin/bash`).
-Schedulers like SLURM also have a special comment used to denote special 
+Schedulers like PBS Pro also have a special comment used to denote special 
 scheduler-specific options.
 Though these comments differ from scheduler to scheduler, 
-SLURM's special comment is `#SBATCH`.
-Anything following the `#SBATCH` comment is interpreted as an instruction to the scheduler.
+PBS Pro's special comment is `#PBS`.
+Anything following the `#PBS` comment is interpreted as an instruction to the scheduler.
 
 Let's illustrate this by example. 
 By default, a job's name is the name of the script,
-but the `-J` option can be used to change the name of a job.
+but the `-N` option can be used to change the name of a job.
 
 Submit the following job (`sbatch example-job.sh`):
 
 ```
 #!/bin/bash
-#SBATCH -J new_name
+#SBATCH -N new_name
 
 echo 'This script is running on:'
 hostname
@@ -146,7 +147,7 @@ sleep 120
 ```
 
 ```
-[remote]$ squeue -u yourUsername
+[remote]$ qstat -u yourUsername
 ```
 {: .bash}
 ```

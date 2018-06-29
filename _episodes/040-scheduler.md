@@ -68,14 +68,17 @@ running the job through the scheduler and just "running it".
 To submit this job to the scheduler, we use the ``qsub`` command
 (assuming our script is called *example-job.sh*):
 
-```
-[remote]$ qsub example-job.sh
+``` 
+[remote]$ qsub -A y15 example-job.sh
 ```
 {: .bash}
 ```
 318747.indy2-login0
 ```
 {: .output}
+
+(We have to specify a *budget* to charge our jobs time to; this is what the ``-A y15``
+option is for. Your Instructor will tell you if you need to use a different budget code.)
 
 And that's all we need to do to submit a job.  Our work is done -- now the 
 scheduler takes over and tries to run the job for us.  While the job is waiting 
@@ -87,10 +90,12 @@ To check on our job's status, we check the queue using the command ``qstat``.
 ```
 {: .bash}
 ```
-   JOBID     USER ACCOUNT           NAME  ST REASON    START_TIME                TIME  TIME_LEFT NODES CPU
-S
-   36856 yourUsername yourAccount example-job.sh   R None      2017-07-01T16:47:02       0:11      59:49     1
-1
+
+indy2-login0: 
+                                                            Req'd  Req'd   Elap
+Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
+--------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
+319011.indy2-lo user     workq    example-jo  21884   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
@@ -103,7 +108,7 @@ To see a real-time view of our jobs, we can use the ``watch`` command.
 Let's try using it to monitor another job.
 
 ```
-[remote]$ qsub example-job.sh
+[remote]$ qsub -A y15 example-job.sh
 [remote]$ watch qtat -u yourUsername
 ```
 {: .bash}
@@ -135,7 +140,7 @@ Let's illustrate this by example.
 By default, a job's name is the name of the script,
 but the `-N` option can be used to change the name of a job.
 
-Submit the following job (`sbatch example-job.sh`):
+Submit the following job (`qsub -A y15 example-job.sh`):
 
 ```
 #!/bin/bash
@@ -151,8 +156,13 @@ sleep 120
 ```
 {: .bash}
 ```
-   JOBID     USER ACCOUNT           NAME  ST REASON    START_TIME                TIME  TIME_LEFT NODES CPUS
-   38191 yourUsername yourAccount       new_name  PD Priority  N/A                       0:00    1:00:00     1  1
+```
+
+indy2-login0: 
+                                                            Req'd  Req'd   Elap
+Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
+--------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
+319011.indy2-lo user     workq    example-jo  21884   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
@@ -162,17 +172,17 @@ Fantastic, we've successfully changed the name of our job!
 > 
 > Jobs on an HPC system might run for days or even weeks.
 > We probably have better things to do than constantly check on the status of our job
-> with `squeue`.
-> Looking at the [online documentation for `sbatch`](https://slurm.schedmd.com/sbatch.html)
-> (you can also google "sbatch slurm"),
+> with `qstat`.
+> Looking at the documentation for `qsub` (use `man qsub`, `Space` to scroll down,
+> `u` to scroll up, `q` to exit)
 > can you set up our test job to send you an email when it finishes?
 > 
-> Hint: you will need to use the `--mail-user` and `--mail-type` options.
+> Hint: you will need to use the `-m` and `-M` options.
 {: .challenge}
 
 ### Resource requests
 
-But what about more important changes, such as the number of CPUs and memory for our jobs?
+But what about more important changes, such as the number of cores and runtime for our jobs?
 One thing that is absolutely critical when working on an HPC system is specifying the 
 resources required to run a job.
 This allows the scheduler to find the right time and place to schedule our job.
@@ -182,13 +192,9 @@ which is probably not what we want.
 
 The following are several key resource requests:
 
-* `-n <nnodes>` - how many nodes does your job need? 
+* `-l select=<nnodes>:ncpus=<cores per node>` - how many nodes and cores per node does your job need? 
 
-* `-c <ncpus>` - How many CPUs does your job need?
-
-* `--mem=<megabytes>` - How much memory on a node does your job need in megabytes? You can also specify gigabytes using by adding a little "g" afterwards (example: `--mem=5g`)
-
-* `--time <days-hours:minutes:seconds>` - How much real-world time (walltime) will your job take to run? The `<days>` part can be omitted.
+* `-l walltime=<hours:minutes:seconds>` - How much real-world time (walltime) will your job take to run?
 
 Note that just *requesting* these resources does not make your job run faster!  We'll 
 talk more about how to make sure that you're using resources effectively in a later 
@@ -196,27 +202,27 @@ episode of this lesson.
 
 > ## Submitting resource requests
 >
-> Submit a job that will use 2 cpus, 4 gigabytes of memory, and 5 minutes of walltime.
+> Submit a job that will use 2 nodes, 36 cores per node, and 5 minutes of walltime.
 {: .challenge}
 
 > ## Job environment variables
 >
-> When SLURM runs a job, it sets a number of environment variables for the job.
-> One of these will let us check our work from the last problem.
-> The `SLURM_CPUS_PER_TASK` variable is set to the number of CPUs we requested with `-c`.
-> Using the `SLURM_CPUS_PER_TASK` variable, 
-> modify your job so that it prints how many CPUs have been allocated.
+> When PBS runs a job, it sets a number of environment variables for the job.
+> One of these will let us check which compute nodes have been assigned to our job.
+> The `PBS_HOSTFILE` variable is set to the name of the file containing the list of
+> compute nodes assigned to our job.
+> Using the `PBS_HOSTFILE` variable, 
+> modify your job so that it prints the list of compute nodes assigned to our job.
 {: .challenge}
 
-Resource requests are typically binding.
-If you exceed them, your job will be killed.
-Let's use walltime as an example.
-We will request 30 seconds of walltime, 
+Resource requests are typically binding.  If you exceed them, your job will be killed.
+Let's use walltime as an example.  We will request 30 seconds of walltime, 
 and attempt to run a job for two minutes.
 
 ```
 #!/bin/bash
-#SBATCH -t 0:0:30
+#PBS -N timeout
+#PBS -l walltime=0:0:30
 
 echo 'This script is running on:'
 hostname
@@ -226,15 +232,13 @@ sleep 120
 Submit the job and wait for it to finish. 
 Once it is has finished, check the log file.
 ```
-[remote]$ sbatch example-job.sh
-[remote]$ watch squeue -u yourUsername
-[remote]$ cat slurm-38193.out
+[remote]$ qsub -A y15 timeout.sh
+[remote]$ watch qstat -u yourUsername
+[remote]$ cat cat timeout.e319076 
 ```
 {: .bash}
 ```
-This job is running on:
-gra533
-slurmstepd: error: *** JOB 38193 ON gra533 CANCELLED AT 2017-07-02T16:35:48 DUE TO TIME LIMIT ***
+=>> PBS: job killed: walltime 49 exceeded limit 30
 ```
 {: .output}
 
@@ -244,28 +248,30 @@ Strict adherence to resource requests allows the scheduler to find the best poss
 for your jobs.
 Even more importantly, 
 it ensures that another user cannot use more resources than they've been given.
-If another user messes up and accidentally attempts to use all of the CPUs or memory on a node, 
-SLURM will either restrain their job to the requested resources or kill the job outright.
-Other jobs on the node will be unaffected.
+If another user messes up and accidentally attempts to use more time than they have been 
+allocated PBS will kill the job. Other jobs will be unaffected.
 This means that one user cannot mess up the experience of others,
 the only jobs affected by a mistake in scheduling will be their own.
 
-## Canceling a job
+## Canceling/deleting a job
 
-Sometimes we'll make a mistake and need to cancel a job.
-This can be done with the `scancel` command.
+Sometimes we'll make a mistake and need to cancel/delete a job.
+This can be done with the `qdel` command.
 Let's submit a job and then cancel it using its job number.
 
 ```
-[remote]$ sbatch example-job.sh
-[remote]$ squeue -u yourUsername
+[remote]$ qsub -A y15 example-job.sh
+[remote]$ qstat -u yourUsername
 ```
 {: .bash}
 ```
-Submitted batch job 38759
+319078.indy2-login0
 
-   JOBID     USER ACCOUNT           NAME  ST REASON    START_TIME                TIME  TIME_LEFT NODES CPUS
-   38759 yourUsername yourAccount example-job.sh  PD Priority  N/A                       0:00       1:00     1    1
+indy2-login0: 
+                                                            Req'd  Req'd   Elap
+Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
+--------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
+319078.indy2-lo aturner  workq    example-jo   3567   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
@@ -273,62 +279,69 @@ Now cancel the job with it's job number.
 Absence of any job info indicates that the job has been successfully canceled.
 
 ```
-[remote]$ scancel 38759
-[remote]$ squeue -u yourUsername
+[remote]$ qdel 319078
+[remote]$ qstat -u yourUsername
 ```
 {: .bash}
 ```
-   JOBID     USER ACCOUNT           NAME  ST REASON    START_TIME                TIME  TIME_LEFT NODES CPUS
+
 ```
 {: .output}
-
-> ## Cancelling multiple jobs
->
-> We can also all of our jobs at once using the `-u` option. 
-> This will delete all jobs for a specific user (in this case us).
-> Note that you can only delete your own jobs.
->
-> Try submitting multiple jobs and then cancelling them all with 
-> `scancel -u yourUsername`.
-{: .challenge}
 
 ## Other types of jobs
 
 Up to this point, we've focused on running jobs in batch mode.
-SLURM also provides the ability to run tasks as a one-off or start an interactive session.
+PBS also provides the ability to run tasks as a one-off or start an interactive session.
 
 There are very frequently tasks that need to be done semi-interactively.
 Creating an entire job script might be overkill, 
 but the amount of resources required is too much for a login node to handle.
 A good example of this might be building a genome index for alignment with a tool like [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml).
-Fortunately, we can run these types of tasks as a one-off with `srun`.
+Fortunately, we can run these types of tasks as a one-off with `qsub --`.
 
-`srun` runs a single command on the cluster and then exits.
-Let's demonstrate this by running the `hostname` command with `srun`.
-(We can cancel an `srun` job with `Ctrl-c`.)
+`qsub --` runs a single command on the compute nodes and then exits.
+Let's demonstrate this by running the `hostname` command with `qsub --`.
+(We can delete a `qsub --` job using `qdel` as described above.)
 
 ```
-[remote]$ srun hostname
+[remote]$ qsub -A y15 -- /bin/hostname
+[remote]$ cat STDIN.o319085
 ```
 {: .bash}
 ```
-gra752
+319085.indy2-login0
+
+r1i3n0
 ```
 {: .output}
 
-`srun` accepts all of the same options as `sbatch`.
-However, instead of specifying these in a script, 
-these options are specified on the command-line when starting a job.
-To submit a job that uses 2 cpus for instance, 
-we could use the following command
-(note that SLURM's environment variables like `SLURM_CPUS_PER_TASK` are only available to batch jobs run with `sbatch`):
+Note that, unlike when we use it on the interactive command line, we had
+to provide the full path to the command: `/bin/hostname` rather than `hostname`.
+This is because the PBS environment inside this job does not contain the information
+to find the command. You can find the full path of a command by using the `which` 
+command:
 
 ```
-[remote]$ srun -c 2 echo "This job will use 2 cpus."
+[remote]$ which hostname
 ```
 {: .bash}
 ```
-This job will use 2 cpus.
+/bin/hostname
+```
+{: .output}
+
+`qsub --` accepts all of the same options as `qsub`.
+However, instead of specifying these in a script, 
+these options are specified on the command-line when starting a job.
+To submit a job that uses 2 nodes (36 cores per node) for instance, 
+we could use the following command
+
+```
+[remote]$ qsub -l select=2:ncpus=36 -A y15 -- /bin/echo "This job will use 2 nodes."
+```
+{: .bash}
+```
+This job will use 2 nodes.
 ```
 {: .output}
 
@@ -337,36 +350,24 @@ This job will use 2 cpus.
 Sometimes, you will need a lot of resource for interactive use.
 Perhaps it's our first time running an analysis 
 or we are attempting to debug something that went wrong with a previous job.
-Fortunately, SLURM makes it easy to start an interactive job with `srun`:
+Fortunately, we can start an interactive job with `qsub`:
 
 ```
-[remote]$ srun --x11 --pty bash
+[remote]$ qsub -I -A y15
 ```
 {: .bash}
+```
+qsub: waiting for job 319086.indy2-login0 to start
+qsub: job 319086.indy2-login0 ready
 
-> ## Note for administrators
-> 
-> The `--x11` option will not work unless the [slurm-spank-x11](https://github.com/hautreux/slurm-spank-x11) plugin is installed.
-> You should also make sure `xeyes` is installed as an example X11 app 
-> (`xorg-x11-apps` package on CentOS).
-> If you do not have these installed, just have students use `srun --pty bash` instead.
-{: .callout}
+[compute]$ 
+```
+{: .output}
 
 You should be presented with a bash prompt.
 Note that the prompt will likely change to reflect your new location, 
-in this case the worker node we are logged on.
+in this case the compute node we are logged onto.
 You can also verify this with `hostname`.
-
-> ## Creating remote graphics
-> 
-> To demonstrate what happens when you create a graphics window on the remote node, 
-> use the `xeyes` command. 
-> A relatively adorable pair of eyes should pop up (press `Ctrl-c` to stop).
->
-> Note that this command requires you to have connected with X-forwarding enabled
-> (`ssh -X username@host.address.ca`). If you are using a Mac, you must have installed
-> XQuartz (and restarted your computer) for this to work.
-{: .challenge}
 
 When you are done with the interactive job, type `exit` to quit your session.
 

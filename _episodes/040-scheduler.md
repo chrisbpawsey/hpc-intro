@@ -156,8 +156,6 @@ sleep 120
 ```
 {: .bash}
 ```
-```
-
 indy2-login0: 
                                                             Req'd  Req'd   Elap
 Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time

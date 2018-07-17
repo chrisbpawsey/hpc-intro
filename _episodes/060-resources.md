@@ -132,3 +132,10 @@ monitor how much time and how many nodes are being used by current jobs. To list
 details of your jobs (queued and running), use `qstat -u yourUsernname` and to list the
 details of all jobs in the queue use `qstat -a`.
 
+## Benchmarking
+
+The process above is used so that you have a good handle on the resources you need to 
+request for your jobs and corresponds to the absolute minimum amount of *benchmarking* 
+a user on a shared HPC system will need to do. However, you will often want to do more
+than this minimum amount of benchmarking and we will discuss how to approach this
+in one of the later episodes in this lesson.

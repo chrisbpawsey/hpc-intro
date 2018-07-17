@@ -29,15 +29,15 @@ we know how much it needs in the way of resources.
 
 The most effective way of figuring out how much resources a job needs is to submit a test job,
 and then ask the scheduler how many resources it used.
-A good rule of thumb is to ask the scheduler for more time and memory than your job can use.
+A good rule of thumb is to ask the scheduler for more time than your job can use.
 This value is typically two to three times what you think your job will need.
 
-> ## Benchmarking Computational Fluid Dynamics
+> ## Resources for Computational Fluid Dynamics (CFD)
 >
-> Copy the Python 2D CFD application from the course website using the following command:
+> Copy the Python 2D CFD application from the course website to the HPC system using the following command:
 >
 > ```
-> wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
+> [remote]$ wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
 > ```
 > {: .bash}
 >
@@ -46,7 +46,7 @@ This value is typically two to three times what you think your job will need.
 > Then unpack it using
 >
 > ```
-> tar -xvf cfd.tar.gz
+> [remote]$ tar -xvf cfd.tar.gz
 > ```
 > {: .bash}
 > 
@@ -64,7 +64,11 @@ This value is typically two to three times what you think your job will need.
 > You might also want to have the scheduler email you to tell you when the job is done.
 >
 > Hint: the job only needs 1 cpu and not too much time.
->  The trick is figuring out just how much you'll need!
+> The trick is figuring out just how much you'll need!
+>
+> Do not forget to check the `.e` file produced by the job to make sure there are no errors!
+> You should also check the `.o` file produced by the job to make sure it contains the output
+> from the CFD program.
 {: .challenge}
 
 Once the job completes, we can query the scheduler to see how long our job took.
@@ -77,10 +81,26 @@ By itself, `qstat -x -u yourUsername` shows all jobs that you have run on the sy
 ```
 {: .bash}
 ```
-NEED TO ADD
+
+indy2-login0: 
+                                                            Req'd  Req'd   Elap
+Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
+--------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
+324396.indy2-lo user     workq    test1       57348   1   1    --  00:01 F 00:00
+324397.indy2-lo user     workq    test2       57456   1   1    --  00:01 F 00:01
+324401.indy2-lo user     workq    test3       58159   1   1    --  00:00 F 00:00
+324410.indy2-lo user     workq    test4       34027   1   1    --  00:05 F 00:05
+324418.indy2-lo user     workq    test5       35243   1   1    --  00:05 F 00:01
 ```
 {: .output}
 
+Comparing the `Req'd Time` and `Elap Time` columns allows you to see if a particular 
+job completed within the requested time. If the two values are the same then this 
+usually means that the job hit the limit of specified walltime resources rather than
+completing successfully. If the elapsed time is less than the requested time then 
+your job completed (either successfully or not!) within the requested time. In this case,
+you will need to check the output files from the job to understand if it ran successfully
+or not.
 
 ## Measuring the statistics of currently running tasks
 

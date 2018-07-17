@@ -22,7 +22,7 @@ How do we ensure that a task is run with the resources it needs?
 This job is handled by a special piece of software called the scheduler.
 On an HPC system, the scheduler manages which jobs run where and when.
 
-> ## Job scheduling roleplay (optional)
+> ## Job scheduling roleplay
 > 
 > Your instructor will divide you into groups taking on 
 > different roles in the cluster (users, compute nodes 
@@ -117,6 +117,30 @@ You should see an auto-updating display of your job's status.
 When it finishes, it will disappear from the queue.
 Press ``Ctrl-C`` when you want to stop the ``watch`` command.
 
+## Output from a job
+
+You may be wondering where the output from your job goes. When you type the `hostname` command
+at the terminal the output comes straight back to you, but a job cannot do this as you may not 
+even be logged in when the job runs.
+
+By default, each PBS job creates two files based on the job script name; one with `.o` and the
+job ID appeneded and one with `.e` and the job ID appended. For the job we submitted above, with
+the script called `example-job.sh` and the job ID `319011`, PBS will create the files:
+
+- example-job.sh.o319011
+- example-job.sh.e319011
+
+These files contain the output that would have been printed to the terminal if you used the commands
+in the job script interactively rather than in a batch job. The `.o` file contains output
+to  *standard out (or stdout)*; this output is usually the output you expect when the command 
+ran as expected (e.g. the name of the host from `hostname`). The `.e` file contains output to
+*standard error (or stderr)*; this includes any error messages that would have been printed (e.g.
+if the `hostname` command could not be found, this error would be in this file).
+
+It is usually a good idea to check the contents of the `.e` file to see if anything went wrong with
+your job (although, more often, people actually check the expected output and then only go and 
+check for errors if something looks odd!).
+
 ## Customizing a job
 
 The job we just ran used all of the scheduler's default options.
@@ -144,7 +168,7 @@ Submit the following job (`qsub -A y15 example-job.sh`):
 
 ```
 #!/bin/bash
-#SBATCH -N new_name
+#PBS -N new_name
 
 echo 'This script is running on:'
 hostname
@@ -160,11 +184,18 @@ indy2-login0:
                                                             Req'd  Req'd   Elap
 Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
 --------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319011.indy2-lo user     workq    example-jo  21884   1   1    --  96:00 R 00:00
+319011.indy2-lo user     workq    new_name   21884   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
 Fantastic, we've successfully changed the name of our job!
+
+One consequence of changing the name of the job is to change the name of the `.o`
+and `.e` files produced by PBS. Now they are the job name appended by `.o`/`.e` and
+the job ID rather than the script name. In this case they will be:
+
+- new_name.o319011
+- new_name.e319011
 
 > ## Setting up email notifications
 > 
@@ -203,7 +234,7 @@ episode of this lesson.
 > Submit a job that will use 2 nodes, 36 cores per node, and 5 minutes of walltime.
 {: .challenge}
 
-> ## Job environment variables
+> ## Job environment variables (compute nodes)
 >
 > When PBS runs a job, it sets a number of environment variables for the job.
 > One of these will let us check which compute nodes have been assigned to our job.
@@ -212,6 +243,24 @@ episode of this lesson.
 > Using the `PBS_HOSTFILE` variable, 
 > modify your job so that it prints the list of compute nodes assigned to our job.
 {: .challenge}
+
+> ## Job environment variables (directory)
+>
+> A key job enviroment variable in PBS is `PBS_O_WORKDIR` that contains the path of
+> the directory from which the job was submitted. To understand why this is important
+> modify your job submission script to print out the directory that it runs in by 
+> default by using the `pwd` command (this prints the current working directory).
+>
+> Now, use the `PBS_O_WORKDIR` environment within your job script to make sure that 
+> the commands you are using run in the directory that you submitted the job from
+> and verify that this has worked using `pwd` again.
+{: .challenge}
+
+You almost always want your job scipt to execute as if it was in the directory from
+which the job was submitted so you will generally make sure you use the `PBS_O_WORKDIR`
+environment variable in all your job scripts. If you encounter errors with files or
+executables not being found it is often worth checking that the job script is executing
+in the location you expect!
 
 Resource requests are typically binding.  If you exceed them, your job will be killed.
 Let's use walltime as an example.  We will request 30 seconds of walltime, 
@@ -232,7 +281,7 @@ Once it is has finished, check the log file.
 ```
 [remote]$ qsub -A y15 timeout.sh
 [remote]$ watch qstat -u yourUsername
-[remote]$ cat cat timeout.e319076 
+[remote]$ cat timeout.e319076 
 ```
 {: .bash}
 ```

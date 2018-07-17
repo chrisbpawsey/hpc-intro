@@ -123,12 +123,35 @@ avoid this issue.
 
 ## Have a backup plan
 
-* Use a VCS system like git to keep track of your code. Though most systems have some form
-  of backup/archival system, you shouldn't rely on it for something as key as your research code.
-  The best backup system is one you manage yourself.
+Although many HPC systems keep backups, it does not always cover all the file systems available
+and may only be for disaster recovery purposes (*i.e.* for restoring the whole file system if lost
+rather than an individual file or directory you have deleted by mistake). Your data on the
+system is primarily your responsibility and you should ensure you have secure copies of data
+that are critical to your work.
 
-* Eventually, your data will need to leave the cluster.  You should have a plan of 
-where you’ll store all your results *before* you run jobs.  
+Version control systems (such as Git) often have free, cloud-based offerings (e.g. Github, Gitlab)
+that are generally used for storing source code. Even if you are not writing your own 
+programs, these can be very useful for storing job scripts, analysis scripts and small
+input files. 
+
+For larger amounts of data, you should make sure you have a robust system in place for taking
+copies of critical data off the HPC system wherever possible to backed-up storage. Tools such
+as `rsync` can be very useful for this.
+
+Your access to the shared HPC system will generally be time-limited so you should ensure you have a
+plan for transferring your data off the system before your access finishes. The time required to
+transfer large amounts of data should not be underestimated and you should ensure you have planned
+for this early enough (ideally, before you even start using the system for your research).
+
+In all these cases, the helpdesk of the system you are using shoud be able to provide useful
+guidance on your options for data transfer for the volumes of data you will be using.
+
+> ## Your data is your responsibility
+> Make sure you understand what the backup policy is on the file systems on the system you are
+> using and what implications this has for your work if you lose your data on the system. Plan
+> your backups of critical data and how you will transfer data off the system throughout the
+> project.
+{: .callout}
 
 ## Save time
 

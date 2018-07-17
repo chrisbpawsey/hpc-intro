@@ -57,8 +57,8 @@ used on HPC systems: the two most common are *TCL modules* and *Lmod*. Both of
 these use similar syntax and the concepts are the same so learning to use one will
 allow you to use whichever is installed on the system you are using. In both 
 implementations the `module` command is used to interact with environment modules. An
-additional subcommand is usually added to the command to specify what you want. For a list
-of subcommnands you can use `module -h` or `module help`. As for all commands you can 
+additional subcommand is usually added to the command to specify what you want to do. For a list
+of subcommnands you can use `module -h` or `module help`. As for all commands, you can 
 access the full help on the *man* pages with `man module`.
 
 On login you may start out with a default set of modules loaded or you may start out
@@ -172,7 +172,7 @@ To understand the output, first we need to understand the nature of the
 `$PATH` is a special ennvironment variable that controls where a Linux *operating system* (OS) looks for software.
 Specifically `$PATH` is a list of directories (separated by `:`)
 that the OS searches through for a command before giving up and telling us it can't find it.
-As with all environment variables we can print it out using `echo`.
+As with all environment variables, we can print it out using `echo`.
 
 ```
 [remote]$ echo $PATH
@@ -287,10 +287,10 @@ Let's examine the output of `module avail` more closely.
 {: .bash}
 ```
 
---------------------------------------------------------- /usr/share/Modules/modulefiles ----------------------------------------------------------
+------------------------------------------------- /usr/share/Modules/modulefiles -------------------------------------------------
 dot         module-git  module-info modules     mpt/2.16    null        perfboost   perfcatcher use.own
 
-------------------------------------------------------------- /lustre/sw/modulefiles --------------------------------------------------------------
+----------------------------------------------------- /lustre/sw/modulefiles -----------------------------------------------------
 abinit/8.2.3-intel17-mpt214(default)    hdf5parallel/1.10.1-gcc6-mpt214         miniconda/python3
 allinea/7.0.0(default)                  hdf5parallel/1.10.1-intel17-mpt214      molpro/2012.1.22(default)
 altair-hwsolvers/13.0.213               intel-cc-16/16.0.2.181                  mpt/2.14
@@ -468,7 +468,7 @@ Resolving deltas: 100% (188/188), done.
 {: .output}
 
 Now, using the instructions in the README.md file, 
-to complete the install is to `cd` into the `seqtk` folder, load the `gcc` module (so we have the
+to complete the install we should `cd` into the `seqtk` folder, load the `gcc` module (so we have the
 required compiler) and run the command `make`.
 
 ```

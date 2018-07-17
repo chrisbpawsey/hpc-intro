@@ -109,7 +109,7 @@ Let's try using it to monitor another job.
 
 ```
 [remote]$ qsub -A y15 example-job.sh
-[remote]$ watch qtat -u yourUsername
+[remote]$ watch qstat -u yourUsername
 ```
 {: .bash}
 
@@ -277,7 +277,7 @@ sleep 120
 ```
 
 Submit the job and wait for it to finish. 
-Once it is has finished, check the log file.
+Once it is has finished, check the `.e` (stderr) file.
 ```
 [remote]$ qsub -A y15 timeout.sh
 [remote]$ watch qstat -u yourUsername
@@ -300,7 +300,7 @@ allocated PBS will kill the job. Other jobs will be unaffected.
 This means that one user cannot mess up the experience of others,
 the only jobs affected by a mistake in scheduling will be their own.
 
-## Canceling/deleting a job
+## Cancelling/deleting a job
 
 Sometimes we'll make a mistake and need to cancel/delete a job.
 This can be done with the `qdel` command.
@@ -331,7 +331,7 @@ Absence of any job info indicates that the job has been successfully canceled.
 ```
 {: .bash}
 ```
-
+[No output as there are no jobs]
 ```
 {: .output}
 

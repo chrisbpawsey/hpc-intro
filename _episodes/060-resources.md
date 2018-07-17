@@ -40,6 +40,20 @@ This value is typically two to three times what you think your job will need.
 > [remote]$ wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
 > ```
 > {: .bash}
+> ```
+> --2018-07-17 11:44:44--  https://epcced.github.io/hpc-intro/files/cfd.tar.gz
+> Resolving epcced.github.io (epcced.github.io)... 185.199.110.153, 185.199.111.153, 185.199.109.153, ...
+> Connecting to epcced.github.io (epcced.github.io)|185.199.110.153|:443... connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: 20480 (20K) [application/gzip]
+> Saving to: ‘cfd.tar.gz’
+> 
+> 100%[===========================================================================================================>] 20,480      --.-K/s   in 0.01s   
+> 
+> 2018-07-17 11:44:44 (2.05 MB/s) - ‘cfd.tar.gz’ saved [20480/20480]
+> 
+> ```
+> {: .output}
 >
 > (`wget` is a command that lets you download files directly from a website.)
 >
@@ -49,6 +63,14 @@ This value is typically two to three times what you think your job will need.
 > [remote]$ tar -xvf cfd.tar.gz
 > ```
 > {: .bash}
+> ```
+> cfd-2d-python/
+> cfd-2d-python/jacobi.py
+> cfd-2d-python/plot_flow.py
+> cfd-2d-python/cfd.py
+> cfd-2d-python/util.py
+> ```
+> {: .output}
 > 
 > (`tar` is a bit like zip, it allows you to create/expand an archive file from multiple files.)
 >
@@ -97,7 +119,8 @@ Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
 Comparing the `Req'd Time` and `Elap Time` columns allows you to see if a particular 
 job completed within the requested time. If the two values are the same then this 
 usually means that the job hit the limit of specified walltime resources rather than
-completing successfully. If the elapsed time is less than the requested time then 
+completing successfully (you will see a message in the `.e` file if you have hit the 
+walltime limit). If the elapsed time is less than the requested time then 
 your job completed (either successfully or not!) within the requested time. In this case,
 you will need to check the output files from the job to understand if it ran successfully
 or not.

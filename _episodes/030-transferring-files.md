@@ -187,36 +187,36 @@ sftp> put -r data/
 Uploading content/ to /lustre/home/y14/yourUsername/data
 Entering content/
 ntering data/
-data/data11.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
-data/data10.dat                                                                                                        100%  100KB   8.8MB/s   00:00    
-data/data12.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
-data/data13.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
-data/data17.dat                                                                                                        100%  100KB   8.8MB/s   00:00    
-data/data16.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
-data/data28.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
-data/data14.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
-data/data15.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
-data/data29.dat                                                                                                        100%  100KB   4.7MB/s   00:00    
-data/data9.dat                                                                                                         100%  100KB   8.2MB/s   00:00    
-data/data8.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
-data/data6.dat                                                                                                         100%  100KB   8.8MB/s   00:00    
-data/data7.dat                                                                                                         100%  100KB   8.8MB/s   00:00    
-data/data5.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
-data/data4.dat                                                                                                         100%  100KB   8.5MB/s   00:00    
-data/data0.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
-data/data1.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
-data/data3.dat                                                                                                         100%  100KB   8.7MB/s   00:00    
-data/data2.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
-data/data24.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
-data/data18.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
-data/data19.dat                                                                                                        100%  100KB   6.2MB/s   00:00    
-data/data25.dat                                                                                                        100%  100KB   7.3MB/s   00:00    
-data/data27.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
-data/data26.dat                                                                                                        100%  100KB   6.2MB/s   00:00    
-data/data22.dat                                                                                                        100%  100KB   6.3MB/s   00:00    
-data/data23.dat                                                                                                        100%  100KB   7.9MB/s   00:00    
-data/data21.dat                                                                                                        100%  100KB   8.0MB/s   00:00    
-data/data20.dat                                                                                                        100%  100KB   7.8MB/s   00:00 
+data/data11.dat                                 100%  100KB   8.4MB/s   00:00    
+data/data10.dat                                 100%  100KB   8.8MB/s   00:00    
+data/data12.dat                                 100%  100KB   8.5MB/s   00:00    
+data/data13.dat                                 100%  100KB   8.7MB/s   00:00    
+data/data17.dat                                 100%  100KB   8.8MB/s   00:00    
+data/data16.dat                                 100%  100KB   8.4MB/s   00:00    
+data/data28.dat                                 100%  100KB   8.7MB/s   00:00    
+data/data14.dat                                 100%  100KB   8.5MB/s   00:00    
+data/data15.dat                                 100%  100KB   8.7MB/s   00:00    
+data/data29.dat                                 100%  100KB   4.7MB/s   00:00    
+data/data9.dat                                  100%  100KB   8.2MB/s   00:00    
+data/data8.dat                                  100%  100KB   8.6MB/s   00:00    
+data/data6.dat                                  100%  100KB   8.8MB/s   00:00    
+data/data7.dat                                  100%  100KB   8.8MB/s   00:00    
+data/data5.dat                                  100%  100KB   8.6MB/s   00:00    
+data/data4.dat                                  100%  100KB   8.5MB/s   00:00    
+data/data0.dat                                  100%  100KB   8.6MB/s   00:00    
+data/data1.dat                                  100%  100KB   8.6MB/s   00:00    
+data/data3.dat                                  100%  100KB   8.7MB/s   00:00    
+data/data2.dat                                  100%  100KB   8.6MB/s   00:00    
+data/data24.dat                                 100%  100KB   8.5MB/s   00:00    
+data/data18.dat                                 100%  100KB   8.4MB/s   00:00    
+data/data19.dat                                 100%  100KB   6.2MB/s   00:00    
+data/data25.dat                                 100%  100KB   7.3MB/s   00:00    
+data/data27.dat                                 100%  100KB   8.7MB/s   00:00    
+data/data26.dat                                 100%  100KB   6.2MB/s   00:00    
+data/data22.dat                                 100%  100KB   6.3MB/s   00:00    
+data/data23.dat                                 100%  100KB   7.9MB/s   00:00    
+data/data21.dat                                 100%  100KB   8.0MB/s   00:00    
+data/data20.dat                                 100%  100KB   7.8MB/s   00:00 
 ```
 {: .output}
 

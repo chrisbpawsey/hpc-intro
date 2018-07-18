@@ -13,26 +13,39 @@ keypoints:
 ---
 
 One thing people very frequently struggle with is transferring files 
-to and from a cluster.
+to and from a remote system.
 We'll cover several methods of doing this from the command line,
-then cover how to do this using the GUI program FileZilla, 
-which is much more straightforwards.
+then cover how to do this using the GUI program FileZilla. The method you 
+choose will be decided by what is most covenient for your workflow.
 
 ## Grabbing files from the internet
 
 To download files from the internet, 
 the easiest tool to use is `wget`.
 The syntax is relatively straightforwards: `wget https://some/link/to/a/file.tar.gz`
-We've actually done this before to download our example files:
 
 ```
-[remote]$ wget https://hpc-carpentry.github.io/hpc-intro/files/bash-lesson.tar.gz
+[remote]$ wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
 ```
 {: .bash}
+```
+--2018-07-17 11:44:44--  https://epcced.github.io/hpc-intro/files/cfd.tar.gz
+Resolving epcced.github.io (epcced.github.io)... 185.199.110.153, 185.199.111.153, 185.199.109.153, ...
+Connecting to epcced.github.io (epcced.github.io)|185.199.110.153|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 20480 (20K) [application/gzip]
+Saving to: ‘cfd.tar.gz’
+
+100%[===========================================================================================================>] 20,480      --.-K/s   in 0.01s   
+
+2018-07-17 11:44:44 (2.05 MB/s) - ‘cfd.tar.gz’ saved [20480/20480]
+
+```
+{: .output}
 
 ## Transferring single files and folders with scp
 
-To copy a single file to or from the cluster, we can use `scp`.
+To copy a single file to or from the remote system, we can use `scp`.
 The syntax can be a little complex for new users, 
 but we'll break it down here:
 
@@ -69,10 +82,10 @@ To recursively copy a directory, we just add the `-r` (recursive) flag:
 `scp` is useful, but what if we don't know the exact location of what we want to transfer?
 Or perhaps we're simply not sure which files we want to tranfer yet.
 `sftp` is an interactive way of downloading and uploading files.
-Let's connect to a cluster, using `sftp`- you'll notice it works the same way as SSH:
+Let's connect to a remote system using `sftp`, you'll notice it works the same way as SSH:
 
 ```
-sftp yourUsername@remote.computer.address
+sftp yourUsername@login.cirrus.ac.uk
 ```
 {: .bash}
 
@@ -118,7 +131,7 @@ sftp> pwd
 ```
 {: .bash}
 ```
-Remote working directory: /global/home/yourUsername
+Remote working directory: /lustre/home/y14/yourUsername
 ```
 {: .output}
 
@@ -129,7 +142,7 @@ sftp> lpwd
 ```
 {: .bash}
 ```
-Local working directory: /home/jeff/Documents/teaching/hpc-intro
+Local working directory: /Users/auser/carpentry
 ```
 {: .output}
 
@@ -138,27 +151,27 @@ The same pattern follows for all other commands:
 * `ls` shows the contents of our remote directory, while `lls` shows our local directory contents.
 * `cd` changes the remote directory, `lcd` changes the local one.
 
-To upload a file, we type `put some-file.txt` (tab-completion works here).
+To upload a file, we type `put some-file.txt`
 
 ```
-sftp> put config.toml
+sftp> put input.dat
 ```
 {: .bash}
 ```
-Uploading config.toml to /global/home/yourUsername/config.toml
-config.toml                                   100%  713     2.4KB/s   00:00 
+Uploading input.dat to /lustre/home/y14/yourUsername/input.dat
+input.dat                                   100% 2000KB  11.0MB/s   00:00
 ```
 {: .output}
 
 To download a file we type `get some-file.txt`:
 
 ```
-sftp> get config.toml
+sftp> get input.dat
 ```
 {: .bash}
 ```
-Fetching /global/home/yourUsername/config.toml to config.toml
-/global/home/yourUsername/config.toml                               100%  713     9.3KB/s   00:00 
+Fetching /lustre/home/y14/yourUsername/input.dat to input.dat
+/lustre/home/y14/yourUsername/input.dat                               100% 2000KB  11.0MB/s   00:00
 ```
 {: .output}
 
@@ -166,20 +179,44 @@ And we can recursively put/get files by just adding `-r`.
 Note that the directory needs to be present beforehand.
 
 ```
-sftp> mkdir content
-sftp> put -r content/
+sftp> mkdir data
+sftp> put -r data/
 ```
 {: .bash}
 ```
-Uploading content/ to /global/home/yourUsername/content
+Uploading content/ to /lustre/home/y14/yourUsername/data
 Entering content/
-content/scheduler.md              100%   11KB  21.4KB/s   00:00    
-content/index.md                  100% 1051     7.2KB/s   00:00    
-content/transferring-files.md     100% 6117    36.6KB/s   00:00    
-content/.transferring-files.md.sw 100%   24KB  28.4KB/s   00:00    
-content/cluster.md                100% 5542    35.0KB/s   00:00    
-content/modules.md                100%   17KB 158.0KB/s   00:00    
-content/resources.md              100% 1115    29.9KB/s   00:00    
+ntering data/
+data/data11.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
+data/data10.dat                                                                                                        100%  100KB   8.8MB/s   00:00    
+data/data12.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
+data/data13.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
+data/data17.dat                                                                                                        100%  100KB   8.8MB/s   00:00    
+data/data16.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
+data/data28.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
+data/data14.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
+data/data15.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
+data/data29.dat                                                                                                        100%  100KB   4.7MB/s   00:00    
+data/data9.dat                                                                                                         100%  100KB   8.2MB/s   00:00    
+data/data8.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
+data/data6.dat                                                                                                         100%  100KB   8.8MB/s   00:00    
+data/data7.dat                                                                                                         100%  100KB   8.8MB/s   00:00    
+data/data5.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
+data/data4.dat                                                                                                         100%  100KB   8.5MB/s   00:00    
+data/data0.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
+data/data1.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
+data/data3.dat                                                                                                         100%  100KB   8.7MB/s   00:00    
+data/data2.dat                                                                                                         100%  100KB   8.6MB/s   00:00    
+data/data24.dat                                                                                                        100%  100KB   8.5MB/s   00:00    
+data/data18.dat                                                                                                        100%  100KB   8.4MB/s   00:00    
+data/data19.dat                                                                                                        100%  100KB   6.2MB/s   00:00    
+data/data25.dat                                                                                                        100%  100KB   7.3MB/s   00:00    
+data/data27.dat                                                                                                        100%  100KB   8.7MB/s   00:00    
+data/data26.dat                                                                                                        100%  100KB   6.2MB/s   00:00    
+data/data22.dat                                                                                                        100%  100KB   6.3MB/s   00:00    
+data/data23.dat                                                                                                        100%  100KB   7.9MB/s   00:00    
+data/data21.dat                                                                                                        100%  100KB   8.0MB/s   00:00    
+data/data20.dat                                                                                                        100%  100KB   7.8MB/s   00:00 
 ```
 {: .output}
 
@@ -201,9 +238,9 @@ When you connect to the cluster, your cluster files will appear on the right han
 To connect to the cluster, 
 we'll just need to enter our credentials at the top of the screen:
 
-* Host: `sftp://login.cac.queensu.ca`
-* User: Your cluster username
-* Password: Your cluster password
+* Host: `sftp://login.cirrus.ac.uk`
+* User: Your username
+* Password: Your password
 * Port: (leave blank to use the default port)
 
 Hit "Quickconnect" to connect!
@@ -211,36 +248,31 @@ You should see your remote files appear on the right hand side of the screen.
 You can drag-and-drop files between the left (local) and right (remote) sides 
 of the screen to transfer files.
 
-## Compressing files
-
-Sometimes we will want to compress files ourselves to make file transfers easier.
-The larger the file, the longer it will take to transfer. 
-Moreover, we can compress a whole bunch of little files into one big file to make it easier
-on us (no one likes transferring 70000 little files)!
-
-The two compression commands we'll probably want to remember are the following:
-
-* Compress a single file with Gzip - `gzip filename`
-* Compress a lot of files/folders with Gzip - `tar -czvf archive-name.tar.gz folder1 file2 folder3 etc`
-
 > ## Transferring files
-> Using one of the above methods, try transferring files to and from the cluster.
-> Which method do you like the best?
+> Using the above methods, try transferring files to and from the cluster.
+> Which method do you like the best and why? Can you think of any potential issues
+> with your preferred method?
 {: .challenge}
 
+## Transferring data efficiently
+
+If we are transferring large amounts of data then there are some additional things we have to take
+into account in terms of performance and being considerate to other users on the system. We will
+talk about these later in the lesson...
+
 > ## Working with Windows
-> When you transfer files to from a Windows system to a Unix system 
+> When you transfer text files to from a Windows system to a Unix system 
 > (Mac, Linux, BSD, Solaris, etc.) this can cause problems.
-> Windows encodes its files slightly different than Unix,
+> Windows encodes its text files slightly different than Unix,
 > and adds an extra character to every line.
 > 
 > On a Unix system, every line in a file ends with a `\n` (newline).
 > On Windows, every line in a file ends with a `\r\n` (carriage return + newline).
 > This causes problems sometimes.
 > 
-> Though most modern programming languages and software handles this correctly,
-> in some rare instances, you may run into an issue.
-> he solution is to convert a file from Windows to Unix encoding with the `dos2unix` command.
+> Though most modern programming languages and software handle this correctly,
+> in some instances, you may run into an issue.
+> The solution is to convert a file from Windows to Unix encoding with the `dos2unix` command.
 > 
 > You can identify if a file has Windows line endings with `cat -A filename`.
 > A file with Windows line endings will have `^M$` at the end of every line.

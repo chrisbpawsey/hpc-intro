@@ -4,12 +4,18 @@ teaching: 15
 exercises: 5
 questions:
 - "How can I be a responsible user?"
+- "How can I protect my data?"
+- "How can I best get large amounts of data off an HPC system?"
 objectives:
 - "Learn how to be a considerate shared system citizen."
+- "Understand how to protect your critical data."
+- "Appreciate the challenges with transferring large amounts of data off HPC systems."
+- "Understand how to conver many files to a single archive file using tar."
 keypoints:
 - "Be careful how you use the login node."
-- "Again, don't run stuff on the login node."
-- "Don't be a bad person and run stuff on the login node."
+- "Your data on the system is your responsibility"
+- "Plan and test large data transfers"
+- "It is often best to convert many files to a single archive file before trasferring."
 ---
 
 One of the major differences between using remote HPC resources and your own system 
@@ -18,8 +24,9 @@ shared between at any one time varies from system to system but it is unlikely y
 will ever be the only user logged into or using such a system.
 
 We have already mentioned one of the consequences of this shared nature of the resources:
-the scheduling system where you submit your jobs, but their are other things you need 
-to consider in order to be a considerate HPC citizen.
+the scheduling system where you submit your jobs, but there are other things you need 
+to consider in order to be a considerate HPC citizen, to protect your critical data
+and to transfer data 
 
 ## Be kind to the login nodes
 
@@ -146,25 +153,126 @@ for this early enough (ideally, before you even start using the system for your 
 In all these cases, the helpdesk of the system you are using shoud be able to provide useful
 guidance on your options for data transfer for the volumes of data you will be using.
 
-> ## Your data is your responsibility
+> ## Your data is your responsibility
 > Make sure you understand what the backup policy is on the file systems on the system you are
 > using and what implications this has for your work if you lose your data on the system. Plan
 > your backups of critical data and how you will transfer data off the system throughout the
 > project.
 {: .callout}
 
-## Save time
+## Transferring data
 
-* Compress files before transferring to save file transfer times with large datasets.  
+As mentioned above, many users run into the challenge of transferring large amounts of data 
+off HPC systems at some point (this is more often in transferring data off than onto systems
+but the advice below applies in either case). Data transfer speed may be limited by many
+different factors so the best data transfer mechanism to use depends on the type of data being
+transferred and where the data is going. Some of the key issues to be aware of are:
 
-* The less resources you ask for, the faster your jobs will find a slot in which to run.
-  Lots of small jobs generally beat a couple big jobs.
+- **Disk speed** - File systems on HPC systems are often highly parallel, consisting of a very
+  large number of high performance disk drives. This allows them to support a very high data
+  bandwidth. Unless the remote system has a similar parallel file system you may find your
+  transfer speed limited by disk performance at that end.
+- **Meta-data performance** - *Meta-data operations* such as opening and closing files or
+  listing the owner or size of a file are much less parallel than read/write operations. If
+  your data consists of a very large number of small files you may find your transfer speed is
+  limited by meta-data operations. Meta-data operations performed by other users of the system
+  can also interact strongly with those you perform so reducing the number of such operations
+  you use (by combining multiple files into a single file) may reduce variability in your transfer
+  rates and increase transfer speeds.
+- **Network speed** - Data transfer performance can be limited by network speed. More importantly
+  it is limited by the slowest section of the network between source and destination. If you are
+  transferring to your laptop/workstation, this is likely to be its connection (either via LAN or 
+  wifi).
+- **Firewall speed** - Most modern networks are protected by some form of firewall that filters
+  out malicious traffic. This filtering has some overhead and can result in a reduction in data
+  transfer performance. The needs of a general purpose network that hosts email/web-servers and
+  desktop machines are quite different from a research network that needs to support high volume
+  data transfers. If you are trying to transfer data to or from a host on a general purpose
+  network you may find the firewall for that network will limit the transfer rate you can achieve.
 
-## Software tips
+As mentioned above, if you have related data that consists of a large number of small files it
+is strongly recommended to pack the files into a larger *archive* file for long term storage and
+transfer. A single large file makes more efficient use of the file system and is easier to move,
+copy and transfer because significantly fewer meta-data operations are required. Archive files can
+be created using tools like `tar`, `cpio` and `zip`. We are going to look at `tar` as it is the 
+most commonly used.
 
-* You can generally install software yourself, but if you want a shared installation of some kind,
-  it might be a good idea to message an administrator.
+The `tar` command packs files into a "Tape ARchive" format intended for backup purposes. To create
+a compressed archive file from a directory you can use:
 
-* Always use the default compilers if possible. Newer compilers are great, but older stuff generally
-  has less compatibility issues.
+```
+[remote]$ tar -cvWlf mydata.tar mydata
+[remote]$ gzip mydata.tar
+```
+{: .bash}
+```
+mydata/
+mydata/output00063.out
+mydata/output00066.out
+mydata/output00051.out
+mydata/output00002.out
+mydata/output00067.out
+mydata/output00046.out
+mydata/output00041.out
+mydata/output00054.out
+
+[long output trimmed]
+
+Verify mydata/
+Verify mydata/output00063.out
+Verify mydata/output00066.out
+Verify mydata/output00051.out
+Verify mydata/output00002.out
+Verify mydata/output00067.out
+Verify mydata/output00046.out
+Verify mydata/output00041.out
+Verify mydata/output00054.out
+
+[long output trimmed]
+
+```
+{: .output}
+
+(In bash, rather than include all options with their own `-` indicator, we can string them together so
+the above tar command is equivalent to `tar -c -v -W -f mydata.tar mydata`.) The second step 
+*compresses* the archive to reduce its size.
+
+The options we used for `tar` are:
+
+- `-c` - Create new archive
+- `-v` - Verbose (print what you are doing!)
+- `-W` - Verify integrity of created archive
+- `-f mydata.tar` - Create the archive in file *mydata.tar*
+
+To extract files from a tar file, the option `-x` is used. If the tar file has also been compressed using
+`gzip` (as we did above) `tar` will automatically uncompress the archive. For example:
+
+```
+[local]$ tar -xvf mydata.tar.gz
+```
+{: .bash}
+```
+mydata/
+mydata/output00063.out
+mydata/output00066.out
+mydata/output00051.out
+mydata/output00002.out
+mydata/output00067.out
+mydata/output00046.out
+mydata/output00041.out
+mydata/output00054.out
+
+[long output trimmed]
+
+```
+{: .output}
+
+> ## Consider the best way to transfer data
+> If you are transferring large amounts of data you will need to think about what may affect your transfer
+> performance. It is always useful to run some tests that you can use to extrapolate how long it will
+> take to transfer your data.
+>
+> If you have many files, it is best to combine them into an archive file before you transfer them using a
+> tool such as `tar`.
+{: .callout}
 

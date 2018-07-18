@@ -55,8 +55,6 @@ This value is typically two to three times what you think your job will need.
 > ```
 > {: .output}
 >
-> (`wget` is a command that lets you download files directly from a website.)
->
 > Then unpack it using
 >
 > ```
@@ -72,7 +70,8 @@ This value is typically two to three times what you think your job will need.
 > ```
 > {: .output}
 > 
-> (`tar` is a bit like zip, it allows you to create/expand an archive file from multiple files.)
+> (`tar` is a bit like zip, it allows you to create/expand an archive file from multiple files. We will introduce it in a
+> bit more detail in a future episode.)
 >
 > Create a job that runs the following commands in the directory containing the `cfd.py` program.
 > 

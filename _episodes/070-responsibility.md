@@ -267,7 +267,7 @@ mydata/output00054.out
 ```
 {: .output}
 
-> ## Consider the best way to transfer data
+> ## Consider the best way to transfer data
 > If you are transferring large amounts of data you will need to think about what may affect your transfer
 > performance. It is always useful to run some tests that you can use to extrapolate how long it will
 > take to transfer your data.

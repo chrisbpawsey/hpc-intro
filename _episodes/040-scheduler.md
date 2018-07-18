@@ -40,13 +40,10 @@ The exact syntax might change, but the concepts remain the same.
 
 ## Running a batch job
 
-The most basic use of the scheduler is to run a command non-interactively.  
-Any command (or series of commands) that you want to run on the cluster is 
-called a *job*, and the process of using a scheduler to run the job is called 
-*batch job submission*.  
+The most basic use of the scheduler is to run a command non-interactively. Any command (or series of commands) that you want to run on the cluster is 
+called a *job*, and the process of using a scheduler to run the job is called *batch job submission*.  
 
-In this case, the job we want to run is just a shell script.
-Let's create a demo shell script to run as a test.
+In this case, the job we want to run is just a shell script. Let's create a demo shell script to run as a test.
 
 > ## Creating our test job
 > 
@@ -82,7 +79,8 @@ option is for. Your Instructor will tell you if you need to use a different budg
 
 And that's all we need to do to submit a job.  Our work is done -- now the 
 scheduler takes over and tries to run the job for us.  While the job is waiting 
-to run, it goes into a list of jobs called the *queue*.  
+to run, it goes into a list of jobs called the *queue*.
+
 To check on our job's status, we check the queue using the command ``qstat``.
 
 ```
@@ -145,18 +143,18 @@ check for errors if something looks odd!).
 
 The job we just ran used all of the scheduler's default options.
 In a real-world scenario, that's probably not what we want.
-The default options represent a reasonable minimum.
+The default options represent a reasonable default.
 Chances are, we will need more cores, more memory, more time, 
 among other special considerations.
 To get access to these resources we must customize our job script.
 
-Comments in UNIX (denoted by `#`) are typically ignored.
+Comments in Unix (denoted by `#`) are typically ignored.
 But there are exceptions.
 For instance the special `#!` comment at the beginning of scripts
 specifies what program should be used to run it (typically `/bin/bash`).
 Schedulers like PBS Pro also have a special comment used to denote special 
-scheduler-specific options.
-Though these comments differ from scheduler to scheduler, 
+scheduler-specific options,
+though these comments differ from scheduler to scheduler.
 PBS Pro's special comment is `#PBS`.
 Anything following the `#PBS` comment is interpreted as an instruction to the scheduler.
 
@@ -219,11 +217,12 @@ If you do not specify requirements (such as the amount of time you need),
 you will likely be stuck with your site's default resources,
 which is probably not what we want.
 
-The following are several key resource requests:
+The following PBS options show how to control resource requests:
 
-* `-l select=<nnodes>:ncpus=<cores per node>` - how many nodes and cores per node does your job need? 
-
-* `-l walltime=<hours:minutes:seconds>` - How much real-world time (walltime) will your job take to run?
+- `-l select=<nnodes>:ncpus=<cores per node>` - how many nodes and cores per node does your job need? 
+- `-l walltime=<hours:minutes:seconds>` - How much real-world time (walltime) will your job take to run?
+- `-l place=scatter:excl` - For parallel jobs, how to distribute the processors across compute nodes
+   (required on Cirrus when you run parallel jobs).
 
 Note that just *requesting* these resources does not make your job run faster!  We'll 
 talk more about how to make sure that you're using resources effectively in a later 
@@ -262,7 +261,7 @@ environment variable in all your job scripts. If you encounter errors with files
 executables not being found it is often worth checking that the job script is executing
 in the location you expect!
 
-Resource requests are typically binding.  If you exceed them, your job will be killed.
+Resource requests are typically binding. If you exceed them, your job will be killed.
 Let's use walltime as an example.  We will request 30 seconds of walltime, 
 and attempt to run a job for two minutes.
 
@@ -384,7 +383,7 @@ To submit a job that uses 2 nodes (36 cores per node) for instance,
 we could use the following command
 
 ```
-[remote]$ qsub -l select=2:ncpus=36 -A y15 -- /bin/echo "This job will use 2 nodes."
+[remote]$ qsub -l select=2:ncpus=36 -l place=scatter:excl -A y15 -- /bin/echo "This job will use 2 nodes."
 ```
 {: .bash}
 ```

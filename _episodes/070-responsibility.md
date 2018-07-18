@@ -12,18 +12,75 @@ keypoints:
 - "Don't be a bad person and run stuff on the login node."
 ---
 
-You now have everything you need to run jobs, transfer files, use/install software,
-and monitor how many resources your jobs are using.
+One of the major differences between using remote HPC resources and your own system 
+(e.g. your laptop) is that they are a shared resource. How many users the resource is
+shared between at any one time varies from system to system but it is unlikely you
+will ever be the only user logged into or using such a system.
 
-So here are a couple final words to live by:
+We have already mentioned one of the consequences of this shared nature of the resources:
+the scheduling system where you submit your jobs, but their are other things you need 
+to consider in order to be a considerate HPC citizen.
 
-## Be kind to the login node
+## Be kind to the login nodes
 
-* The login node is very busy managing lots and lots of jobs! It doesn’t have any 
-extra space to run computational work.  Don’t run jobs on the login node, though 
-quick tests are generally fine. A “quick test” is generally anything that uses 
-less than 10GB of memory, 4 CPUs, and 15 minutes of time. 
-Remember, the login node is to be shared with other users.
+The login node is often very busy managing lots of users logged in, creating and editing files
+and compiling software! It doesn’t have any extra space to run computational work.
+
+Don’t run jobs on the login node (though quick tests are generally fine). A “quick test” is
+generally anything that uses less than 4GB of memory, 4 CPUs, and 10 minutes of time. If you
+use too much resource then other users on the login node will start to be affected - their
+login sessions will start to run slowly and may even freeze or hang. 
+
+> ## Login nodes are a shared resource
+>
+> Remember, the login node is shared with all other users and your actions could cause
+> issues for other people. Think carefully about the potential implications of issuing
+> commands that may use large amounts of resource.
+>
+{: .callout}
+
+You can always use the command `ps ux` to list the processes you are running on a login
+node and the amount of CPU and memory they are using. The `kill` command can be used along
+with the *PID* to terminate any processes that are using large amounts of resource.
+
+```
+[remote]$ module load anaconda/python2
+[remote]$ python cfd.py 100 10000 &
+[remote]$ ps ux
+```
+{: .bash}
+```
+[1] 61091
+
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+user     56164  0.0  0.0 142392  2136 ?        S    14:31   0:00 sshd: user@pts/84
+user     56165  0.1  0.0 114640  3296 pts/84   Ss   14:31   0:00 -bash
+user     61091 87.5  0.1 504388 381364 pts/84  R    14:32   0:03 python cfd.py 100 10000
+user     61497  5.0  0.0 149144  1800 pts/84   R+   14:32   0:00 ps ux
+user     67737  0.0  0.0 142392  2144 ?        S    12:29   0:00 sshd: user@pts/55
+user     67738  0.0  0.0 114540  3096 pts/55   Ss+  12:29   0:00 -bash
+```
+{: .output}
+
+The python command with PID 61091 is using a large amount of CPU (87.5%) so we probably
+should kill it:
+
+```
+[remote]$ kill 61091
+[remote]$ ps ux
+```
+{: .bash}
+```
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+user     56164  0.0  0.0 142392  2136 ?        S    14:31   0:00 sshd: user@pts/84
+user     56165  0.1  0.0 114640  3296 pts/84   Ss   14:31   0:00 -bash
+user     62908  0.0  0.0 149144  1800 pts/84   R+   14:32   0:00 ps ux
+user     67737  0.0  0.0 142392  2144 ?        S    12:29   0:00 sshd: user@pts/55
+user     67738  0.0  0.0 114540  3096 pts/55   Ss+  12:29   0:00 -bash
+[1]+  Terminated              python cfd.py 100 10000
+```
+{: .output}
+
 
 > ## Login Node Etiquette
 > 
@@ -36,21 +93,65 @@ Remember, the login node is to be shared with other users.
 > 
 {: .challenge}
 
-* If someone is being inappropriate and using the login node to run all of their stuff, 
-  message an administrator to take a look at things and deal with them.
+If you experience performance issues with a login node you should report it to the system
+staff (usually via the helpdesk) for them to investigate. You can use the `top` command
+to see which users are using which resources.
 
 ## Test before scaling
 
-* Before submitting a large run of jobs, submit one as a test first to make sure everything works.
+Remember that you are generally charged for usage on shared systems. A simple mistake in a 
+job script can end up costing a large amount of resource budget. Imagine a job script with 
+a mistake that makes it sit doing nothing for 24 hours on 1000 cores or one where you have
+requested 2000 cores by mistake and only use 100 of them! This problem can be compounded 
+when people write scripts that automate job submission (for example, when running the same
+calculation or analysis over lots of different input).  When this happens it hurts both you
+(as you waste lots of charged resource) and other users (who are blocked from accessing the
+idle compute nodes).
+
+On very busy resources you may wait many days in a queue for your job to fail within 10 seconds
+of starting due to a trivial typo in the job script. This is extremely frustrating! Most
+systems provide small, short queues for testing that have short wait times to help you 
+avoid this issue.
+
+> ## Test job submission scripts that use large amounts of resource
+> Before submitting a large run of jobs, submit one as a test first to make sure everything works
+> as expected.
+>
+> Before submitting a very large or very long job submit a short trunctated test to ensure that
+> the job starts as expected
+{: .callout}
 
 ## Have a backup plan
 
-* Use a VCS system like git to keep track of your code. Though most systems have some form
-  of backup/archival system, you shouldn't rely on it for something as key as your research code.
-  The best backup system is one you manage yourself.
+Although many HPC systems keep backups, it does not always cover all the file systems available
+and may only be for disaster recovery purposes (*i.e.* for restoring the whole file system if lost
+rather than an individual file or directory you have deleted by mistake). Your data on the
+system is primarily your responsibility and you should ensure you have secure copies of data
+that are critical to your work.
 
-* Eventually, your data will need to leave the cluster.  You should have a plan of 
-where you’ll store all your results *before* you run jobs.  
+Version control systems (such as Git) often have free, cloud-based offerings (e.g. Github, Gitlab)
+that are generally used for storing source code. Even if you are not writing your own 
+programs, these can be very useful for storing job scripts, analysis scripts and small
+input files. 
+
+For larger amounts of data, you should make sure you have a robust system in place for taking
+copies of critical data off the HPC system wherever possible to backed-up storage. Tools such
+as `rsync` can be very useful for this.
+
+Your access to the shared HPC system will generally be time-limited so you should ensure you have a
+plan for transferring your data off the system before your access finishes. The time required to
+transfer large amounts of data should not be underestimated and you should ensure you have planned
+for this early enough (ideally, before you even start using the system for your research).
+
+In all these cases, the helpdesk of the system you are using shoud be able to provide useful
+guidance on your options for data transfer for the volumes of data you will be using.
+
+> ## Your data is your responsibility
+> Make sure you understand what the backup policy is on the file systems on the system you are
+> using and what implications this has for your work if you lose your data on the system. Plan
+> your backups of critical data and how you will transfer data off the system throughout the
+> project.
+{: .callout}
 
 ## Save time
 

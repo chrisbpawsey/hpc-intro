@@ -13,8 +13,8 @@ objectives:
 - "Understand how to conver many files to a single archive file using tar."
 keypoints:
 - "Be careful how you use the login node."
-- "Your data on the system is your responsibility"
-- "Plan and test large data transfers"
+- "Your data on the system is your responsibility."
+- "Plan and test large data transfers."
 - "It is often best to convert many files to a single archive file before trasferring."
 ---
 

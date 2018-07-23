@@ -106,7 +106,7 @@ monitor how much time and how many nodes are being used by current jobs. To list
 details of your jobs (queued and running), use `qstat -u yourUsernname` and to list the
 details of all jobs in the queue use `qstat -a`.
 
-## Benchmarking
+## Benchmarking
 
 The process above is used so that you have a good handle on the resources you need to 
 request for your jobs and corresponds to the absolute minimum amount of *benchmarking* 

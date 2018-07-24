@@ -189,51 +189,47 @@ the following convention:
 Now we can log into the Cirrus HPC system we will look at the nodes. You should remember that there 
 are at least two  types of node on the system: *login nodes* and *compute nodes*.
 
-We can use the ``/proc`` file system to examine what the hardware looks like on the login node. Use 
-the ``cat`` command to print information on the processors on the login nodes to the terminal:
+We can use the `lscpu` command to print information on the processors on the login nodes to the terminal:
 
 ```
-[remote]$ cat /proc/cpuinfo
+[remote]$ lscpu
 ```
 {: .bash}
 ```
-
-processor	: 71
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 79
-model name	: Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz
-stepping	: 1
-microcode	: 0xb000010
-cpu MHz		: 1199.707
-cache size	: 46080 KB
-physical id	: 1
-siblings	: 36
-core id		: 27
-cpu cores	: 18
-apicid		: 119
-initial apicid	: 119
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 20
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer xsave avx f16c rdrand lahf_lm abm 3dnowprefetch ida arat epb pln pts dtherm tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdseed adx smap xsaveopt cqm_llc cqm_occup_llc
-bogomips	: 4205.47
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 46 bits physical, 48 bits virtual
-power management:
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                72
+On-line CPU(s) list:   0-71
+Thread(s) per core:    2
+Core(s) per socket:    18
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 79
+Model name:            Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz
+Stepping:              1
+CPU MHz:               1199.953
+BogoMIPS:              4205.47
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              46080K
+NUMA node0 CPU(s):     0-17,36-53
+NUMA node1 CPU(s):     18-35,54-71
 ```
 {: .output}
 
-The text above just shows a fragment of the output giving information on a single core of the 
-login node. We can get some useful information from this output:
+We can get some useful information from this output:
 
 * The processor model is:  Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz (you could use [Intel Ark](http://ark.intel.com) along with the model number to get more information if you wanted)
-* There are 18 cores per processor: ``cpu cores	: 18``
-* There are two processors per node: ``physical id	: 1`` (numbering starts at zero and this is the last entry so there are two processors at most)
+* There are 18 cores per processor: ``Core(s) per socket: 18``
+* There are two processors per node: ``Sockets: 2``
+* This means that there are 2 * 18 = 36 cores on the node
 
-We can extract information about the amount of memory available in a similar way. In this case we only want the first line as it will give
+We can extract information about the amount of memory available from the `/proc/meminfo` file. In this case we only want the first line as it will give
 us the total amount of memory available so we use the ``head -1`` command:
 
 ```
@@ -266,10 +262,11 @@ the scheduler to submit jobs later, but for now, will use it to tell us more inf
 the compute nodes and what is available.  
 
 We are going to repeat the commands above on a compute node. To do this, we will run an *interactive job* which will give
-us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler:
+us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler (your
+instructor will tell you what to use for `<ResID>` (the reservation ID) as this will be different at each workshop:
 
 ```
-[remote]$ qsub -I -l select=1 -A y14
+[remote]$ qsub -q <ResID> -I -l select=1 -A y15
 ```
 {: .bash}
 ```

@@ -110,7 +110,7 @@ In reality, most research workflows exhibit many of these bottlenecks at differe
 > ## What is limiting me?
 > Think about a research workflow you use. Discuss this with your neighbor. Can you identify which of the bottlenecks described above may apply to your workflow?
 >
-> Identify 1 of these bottlenecks in the Etherpad and explain why you think it applies to your workflow.
+> Identify 1 of these bottlenecks and explain why you think it applies to your workflow.
 >
 > This activity should take about 5 minutes.
 {: .challenge}

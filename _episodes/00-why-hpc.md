@@ -23,7 +23,7 @@ keypoints:
 > help you do your research?  How could more computing help you
 > do more or better research?  
 >
-> Summarise your discussion in 2-3 sentances in the Etherpad.
+> Summarise your discussion in 2-3 sentances.
 > 
 > This discussion should take about 5 minutes
 {: .challenge}

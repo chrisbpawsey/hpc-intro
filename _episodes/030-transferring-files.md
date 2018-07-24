@@ -85,7 +85,7 @@ Or perhaps we're simply not sure which files we want to tranfer yet.
 Let's connect to a remote system using `sftp`, you'll notice it works the same way as SSH:
 
 ```
-sftp yourUsername@login.cirrus.ac.uk
+[local]$ sftp yourUsername@login.cirrus.ac.uk
 ```
 {: .bash}
 

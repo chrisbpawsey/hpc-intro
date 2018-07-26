@@ -12,11 +12,11 @@ objectives:
 keypoints:
 - "The scheduler handles how compute resources are shared between users."
 - "Everything you do should be run through the scheduler."
-- "A job is just a shell script."
+- "A job is a lot more than just a shell script! It is workflow for all your computational work. This is what your share with collaborators and documents what you did to produce your computational results that are making up your research outcomes and allows for others to easily reproduce and validate your research."
 - "If in doubt, request more resources than you will need."
 ---
 
-An HPC system might have thousands of nodes and thousands of users.
+An HPC system is a SHARED resource it might have thousands of nodes but it could also have thousands of users.
 How do we decide who gets what and when?
 How do we ensure that a task is run with the resources it needs?
 This job is handled by a special piece of software called the scheduler.

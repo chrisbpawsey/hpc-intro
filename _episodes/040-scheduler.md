@@ -74,7 +74,7 @@ To submit this job to the scheduler, we use the ``qsub`` command
 ```
 {: .output}
 
-(We have to specify a *budget* to charge our jobs time to; this is what the ``-q <ResID> -A y15``
+(We have to specify a *budget* to charge our jobs time to; this is what the ``-A y15``
 option is for. Your Instructor will tell you if you need to use a different budget code.)
 
 And that's all we need to do to submit a job.  Our work is done -- now the 
@@ -122,7 +122,7 @@ at the terminal the output comes straight back to you, but a job cannot do this 
 even be logged in when the job runs.
 
 By default, each PBS job creates two files based on the job script name; one with `.o` and the
-job ID appeneded and one with `.e` and the job ID appended. For the job we submitted above, with
+job ID appended and one with `.e` and the job ID appended. For the job we submitted above, with
 the script called `example-job.sh` and the job ID `319011`, PBS will create the files:
 
 - example-job.sh.o319011
@@ -317,7 +317,7 @@ indy2-login0:
                                                             Req'd  Req'd   Elap
 Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
 --------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319078.indy2-lo aturner  workq    example-jo   3567   1   1    --  96:00 R 00:00
+319078.indy2-lo user     workq    example-jo   3567   1   1    --  96:00 R 00:00
 ```
 {: .output}
 

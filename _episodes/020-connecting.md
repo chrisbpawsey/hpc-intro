@@ -82,7 +82,8 @@ you will have a terminal window at your disposal.
 
 #### PuTTY
 
-It is strictly speaking not necessary to have a terminal running on your local computer in order to access and use a remote system, only a window into the remote system once connected.  PuTTy is likely the oldest, most well-known, and widely used software solution to take this approach.
+It is strictly speaking not necessary to have a terminal running on your local
+computer in order to access and use a remote system, only a window into the remote system once connected.  PuTTy is likely the oldest, most well-known, and widely used software solution to take this approach.
 
 PuTTY is available for free download from [www.putty.org](http://www.putty.org/).  Download the version that is correct for your operating system and install it as you would other software on you Windows system.  Once installed it will be available through the start menu or similar.
 
@@ -98,7 +99,7 @@ For those logging in with PuTTY it would likely be best to cover the terminal ba
 
 With all of this in mind, let's connect to a cluster. 
 
-For this lesson, we will use [Cirrus](http://www.cirrus.ac.uk) - an HPC system located at [EPCC](http://www.epcc.ed.ac.uk)./
+For this lesson, we will use [Cirrus](http://www.cirrus.ac.uk) - an HPC system located at [EPCC](http://www.epcc.ed.ac.uk).
 Although it's unlikely that every system will be exactly like Cirrus, it's a good example of what you can expect from an HPC system.
 To connect to our example computer, we will use SSH (if you are using PuTTY, see above for instructions). 
 
@@ -117,7 +118,7 @@ Your Instructor will give you the correct username to use in place of "yourUsern
 The authenticity of host 'login.cirrus.ac.uk (129.215.175.28)' can't be established.
 ECDSA key fingerprint is SHA256:JRj286Pkqh6aeO5zx1QUkS8un5fpcapmezusceSGhok.
 ECDSA key fingerprint is MD5:99:59:db:b1:3f:18:d0:2c:49:4e:c2:74:86:ac:f7:c6.
-Are you sure you want to continue connecting (yes/no)?  # type "yes"!
+Are you sure you want to continue connecting (yes/no)? # type "yes"!
 Warning: Permanently added the ECDSA host key for IP address '129.215.175.28' to the list of known hosts.
 yourUsername@login.cirrus.ac.uk password:  # no text appears as you enter your password
 Last login: Mon Jun 18 16:21:52 2018 from cpc102380-sgyl38-2-0-cust601.18-2.cable.virginm.net
@@ -244,7 +245,7 @@ MemTotal:       263772152 kB
 ```
 {: .output}
 
-This tells us that there are 252 GB of memory available (this is out of 256 GB, ~4GB are reserved for various parts of computing hardware.
+This tells us that there are approximately 252 GB of memory available (263772152/[1024*1024] = 251.55 GB) (this is out of 256 GB, ~4GB are reserved for various parts of computing hardware).
 
 > ## Units
 > 
@@ -268,7 +269,7 @@ We are going to repeat the commands above on a compute node. To do this, we will
 us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler:
 
 ```
-[remote]$ qsub -I -l select=1 -A z04
+[remote]$ qsub -I -l select=1 -A y14
 ```
 {: .bash}
 ```
@@ -294,5 +295,5 @@ You should see your prompt change to indicate that your shell is now on a comput
 > hardware available on the HPC system?
 {: .challenge}
 
-Now we know how to connect to the HPC system we will next learn how to transfer data on and off the system.
+Now we know how to connect to the HPC system, we will next learn how to transfer data on and off the system.
 

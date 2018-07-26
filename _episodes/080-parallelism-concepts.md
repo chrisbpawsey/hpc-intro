@@ -50,9 +50,48 @@ Using this form of parallelism, applications are (usually) limited to the number
 > We are going to **compile** and run some serial and parallel applications and explore how they work.  
 > You will need some files, so login to Cirrus and use `wget` to download some files:
 > ```
-> wget 
+> wget https://github.com/EPCCed/hpc-intro/tree/gh-pages/files/parallel_files.tar.gz
 > ```
 > {: .bash}
 > 
 > This is a compressed file. How can we uncompress it to examine it's contents?
 {: .challenge}
+
+> ## Compiling codes
+> All of these short example codes are written in Fortran. They need to be **compiled** to an executable file so that we can run them on Cirrus.
+> To do so, we need to load a compiler module:
+> ```
+> module load gcc/6.2.0
+> ```
+> {: .bash}
+>
+> and to compile the `serial_pi.f90` code we would do:
+>
+> ```
+> gfortran -o serial_pi.x serial_pi.f90
+> ```
+> {: .bash}
+>
+> This will create a new file, `serial_pi.x` which you can execute.
+{: .challenge}
+
+> ## Submitting a job
+> Create and submit a job script to run the `serial_pi.x` code and examine the result. Did it work?
+>
+{: .challenge}
+
+## Compiling and running OpenMP codes
+The files you downloaded includes an OpenMP code: `hellw.f`. To compile this code we need to tell the compiler to recognise it as an an OpenMP parallel
+code:
+```
+gfortran -fopenmp hellw.f -o hellw.x
+```
+{: .bash}
+
+If you look at the souce code, you may be able to identify some of the OpenMP *pragmas* (instructions to the compiler) that mark sections of the code that
+can be executed in parallel.
+
+
+
+
+

@@ -96,9 +96,10 @@ and this will differ from individual to individual!
 >
 > This exercise involves:
 >
-> - Downloading and expanding the dataset to the HPC system from:  https://epcced.github.io/hpc-intro/files/parallel-example.tar.gz
+> - Downloading and expanding the dataset to the HPC system from:  https://epcced.github.io/hpc-intro/files/parallel_example.tar.gz
 > - Writing a job submission script to run a single analysis using the `blast` module and the command
-    `blastp -db pdb_blast_db_example/pdb_seqres.txt -query test_seq0.fas -out output_seq0.blast -evalue 0.0001 -word_size 7 -outfmt "6 std stitle staxids sscinames" -max_target_seqs 10 -num_threads 1` 
+    `blastp -db pdb_blast_db_example/pdb_seqres.txt -query test_seq_0.fas -out output_seq_0.blast -evalue 0.0001 -word_size 7 -outfmt "6 std stitle staxids sscinames" -max_target_seqs 10 -num_threads 1` 
+>   (note that there will be no output from this alignment if it works correctly).
 > - Choosing a method to run multiple copies of the analysis to complete all 100 analyss tasks in a parallel way
 >   (not all 100 have to be run simultaneously)
 >

@@ -22,7 +22,7 @@ choose will be decided by what is most covenient for your workflow.
 
 To download files from the internet, 
 the easiest tool to use is `wget`.
-The syntax is relatively straightforwards: `wget https://some/link/to/a/file.tar.gz`
+The syntax is relatively straightforward: `wget https://some/link/to/a/file.tar.gz`
 
 ```
 [remote]$ wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
@@ -225,7 +225,7 @@ To quit, we type `exit` or `bye`.
 ## Transferring files interactively with FileZilla (sftp)
 
 FileZilla is a cross-platform client for downloading and uploading files to and from a remote computer.
-It is absolutely fool-proof and always works quite well.
+It is absolutely fool-proof(!) and always works quite well.
 In fact, it uses the exact same protocol as `sftp` under the hood.
 If `sftp` works, so will FileZilla!
 

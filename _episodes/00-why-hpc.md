@@ -94,7 +94,7 @@ Using an HPC system often has the following advantages for researchers:
 > differences you may already know about, and some
 > differences/difficulties you imagine you may run into.
 >
-> Summarise your discussion in 2-3 sentances in the Etherpad.
+> Summarise your discussion in 2-3 sentances.
 > 
 > This discussion should take about 5 minutes
 {: .challenge}

@@ -40,7 +40,7 @@ key sequence: Ctrl+Alt+T.
 
 ### Mac
 
-Macs have had a terminal built in since the first version of OSX since it is
+Macs have had a terminal built in since the first version of macOS (OSX) as it is
 built on a Linux flavour known as BSD (Berkeley Systems Designs). 
 The terminal can be quickly opened through the use of the Spotlight tool. 
 Hold down the command key and press the spacebar. 
@@ -251,18 +251,19 @@ This tells us that there are approximately 252 GB of memory available (263772152
 > and so on.  
 >
 > You may also see units that use multiples of 1024 rather than 1000. So, 1024 bytes is a 
-> kibibyte (KiB), 1024 KiB is a mebibyte (MiB), 1024 MiB is a gibibyte (GiB) and so on. For
-> low amounts of storage the differences between these two units are negligible but as the
+> kibibyte (KiB), 1024 KiB is a mebibyte (MiB), 1024 MiB is a gibibyte (GiB) and so on.
+>
+> For small amounts of storage the differences between these two unit systems are negligible but as the
 > size increases the differences can be significant.
 {: .callout}
 
 We can now repeat this for the compute nodes. All interaction with the compute nodes is handled by a specialized piece of software called a scheduler
 (the scheduler used in this lesson is called PBS Pro).  We will learn more about how to use 
-the scheduler to submit jobs later, but for now, will use it to tell us more information about 
+the scheduler to submit jobs later, but for now, we will use it to tell us more information about 
 the compute nodes and what is available.  
 
 We are going to repeat the commands above on a compute node. To do this, we will run an *interactive job* which will give
-us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler (your
+us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler. Your
 instructor will tell you what to use for `<ResID>` (the reservation ID) as this will be different at each workshop:
 
 ```
@@ -273,7 +274,7 @@ instructor will tell you what to use for `<ResID>` (the reservation ID) as this 
 qsub: waiting for job 316267.indy2-login0 to start
 qsub: job 316267.indy2-login0 ready
 
-[compute ~]$
+[compute]$
 ```
 {: .output}
 

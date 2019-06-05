@@ -66,7 +66,7 @@ To submit this job to the scheduler, we use the ``qsub`` command
 (assuming our script is called *example-job.sh*):
 
 ``` 
-[remote]$ qsub -A y15 example-job.sh
+[remote]$ qsub -q <ResID> -A y15 example-job.sh
 ```
 {: .bash}
 ```
@@ -106,7 +106,7 @@ To see a real-time view of our jobs, we can use the ``watch`` command.
 Let's try using it to monitor another job.
 
 ```
-[remote]$ qsub -A y15 example-job.sh
+[remote]$ qsub -q <ResID> -A y15 example-job.sh
 [remote]$ watch qstat -u yourUsername
 ```
 {: .bash}
@@ -122,7 +122,7 @@ at the terminal the output comes straight back to you, but a job cannot do this 
 even be logged in when the job runs.
 
 By default, each PBS job creates two files based on the job script name; one with `.o` and the
-job ID appeneded and one with `.e` and the job ID appended. For the job we submitted above, with
+job ID appended and one with `.e` and the job ID appended. For the job we submitted above, with
 the script called `example-job.sh` and the job ID `319011`, PBS will create the files:
 
 - example-job.sh.o319011
@@ -162,7 +162,7 @@ Let's illustrate this by example.
 By default, a job's name is the name of the script,
 but the `-N` option can be used to change the name of a job.
 
-Submit the following job (`qsub -A y15 example-job.sh`):
+Submit the following job (`qsub -q <ResID> -A y15 example-job.sh`):
 
 ```
 #!/bin/bash
@@ -278,7 +278,7 @@ sleep 120
 Submit the job and wait for it to finish. 
 Once it is has finished, check the `.e` (stderr) file.
 ```
-[remote]$ qsub -A y15 timeout.sh
+[remote]$ qsub -q <ResID> -A y15 timeout.sh
 [remote]$ watch qstat -u yourUsername
 [remote]$ cat timeout.e319076 
 ```
@@ -306,7 +306,7 @@ This can be done with the `qdel` command.
 Let's submit a job and then cancel it using its job number.
 
 ```
-[remote]$ qsub -A y15 example-job.sh
+[remote]$ qsub -q <ResID> -A y15 example-job.sh
 [remote]$ qstat -u yourUsername
 ```
 {: .bash}
@@ -317,7 +317,7 @@ indy2-login0:
                                                             Req'd  Req'd   Elap
 Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
 --------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319078.indy2-lo aturner  workq    example-jo   3567   1   1    --  96:00 R 00:00
+319078.indy2-lo user     workq    example-jo   3567   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
@@ -350,7 +350,7 @@ Let's demonstrate this by running the `hostname` command with `qsub --`.
 (We can delete a `qsub --` job using `qdel` as described above.)
 
 ```
-[remote]$ qsub -A y15 -- /bin/hostname
+[remote]$ qsub -q <ResID> -A y15 -- /bin/hostname
 [remote]$ cat STDIN.o319085
 ```
 {: .bash}
@@ -383,7 +383,7 @@ To submit a job that uses 2 nodes (36 cores per node) for instance,
 we could use the following command
 
 ```
-[remote]$ qsub -l select=2:ncpus=36 -l place=scatter:excl -A y15 -- /bin/echo "This job will use 2 nodes."
+[remote]$ qsub -l select=2:ncpus=36 -l place=scatter:excl -q <ResID> -A y15 -- /bin/echo "This job will use 2 nodes."
 ```
 {: .bash}
 ```
@@ -399,7 +399,7 @@ or we are attempting to debug something that went wrong with a previous job.
 Fortunately, we can start an interactive job with `qsub`:
 
 ```
-[remote]$ qsub -I -A y15
+[remote]$ qsub -I -q <ResID> -A y15
 ```
 {: .bash}
 ```

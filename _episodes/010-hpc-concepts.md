@@ -100,17 +100,17 @@ A few properties of HPC systems mean that you often need to modify your computat
 
 The "P" in HPC does stand for performance and the make up of an HPC system is designed to allow researchers to access higher performance (or capabilities) than they could on their local systems. The way in which an HPC system is put together does have an impact on performance and workfows are often categorised according to which part of the HPC system constrains their performance. You may see the following terms used to describe performance on an HPC system:
 
-* Compute bound. The performance of the workflow is limited by the floating point (FPU) performance of the nodes. This is typically seen when peforming math-heavy operations such as diagonalising matrices in computational chemistry software or computing pairwise force interactions in biomolecular simulations.
-* Memory bound. The performance of the workflow is limited by access to memory (usually in terms of *bandwidth*: how much data can you access at one time). Almost all current HPC applications have a part of their workflow that is memory bound. A typical example of a memory bound application would be something like computational fluid dynamics.
-* I/O bound. The performance of the workflow is limited by access to storage (usually in terms of bandwidth but sometimes in terms of numbers of files being accessed simultaneously). This is often seen in climate modelling and bioinformatics workflows.
-* Communication bound. The performance of the workflow is limited by how quickly the parallel tasks can exchange information across the interconnect. This is often seen when single applications scale out to very large numbers of nodes and the amount of traffic flowing across the interconnect becomes high. Particular common algorithms, such as multidimensional Fourier transformations, can also exhibit this behaviour.
+* **Compute bound.** The performance of the workflow is limited by the floating point (FPU) performance of the nodes. This is typically seen when peforming math-heavy operations such as diagonalising matrices in computational chemistry software or computing pairwise force interactions in biomolecular simulations.
+* **Memory bound.** The performance of the workflow is limited by access to memory (usually in terms of *bandwidth*: how much data can you access at one time). Almost all current HPC applications have a part of their workflow that is memory bound. A typical example of a memory bound application would be something like computational fluid dynamics.
+* **I/O bound.** The performance of the workflow is limited by access to storage (usually in terms of bandwidth but sometimes in terms of numbers of files being accessed simultaneously). This is often seen in climate modelling and bioinformatics workflows.
+* **Communication bound.** The performance of the workflow is limited by how quickly the parallel tasks can exchange information across the interconnect. This is often seen when single applications scale out to very large numbers of nodes and the amount of traffic flowing across the interconnect becomes high. Particular common algorithms, such as multidimensional Fourier transformations, can also exhibit this behaviour.
 
 In reality, most research workflows exhibit many of these bottlenecks at different points in their execution.
 
 > ## What is limiting me?
 > Think about a research workflow you use. Discuss this with your neighbor. Can you identify which of the bottlenecks described above may apply to your workflow?
 >
-> Identify 1 of these bottlenecks in the Etherpad and explain why you think it applies to your workflow.
+> Identify 1 of these bottlenecks and explain why you think it applies to your workflow.
 >
 > This activity should take about 5 minutes.
 {: .challenge}

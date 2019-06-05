@@ -42,3 +42,7 @@ Materials will be provided in advance of the workshop and large-print handouts a
 
 Please register for this event on [the ARCHER Training page](http://www.archer.ac.uk/training/).
 
+### Discussion
+
+* Course Etherpad: https://pad.carpentries.org/2018-07-25-leeds
+

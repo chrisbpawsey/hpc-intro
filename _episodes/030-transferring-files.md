@@ -22,7 +22,7 @@ choose will be decided by what is most covenient for your workflow.
 
 To download files from the internet, 
 the easiest tool to use is `wget`.
-The syntax is relatively straightforwards: `wget https://some/link/to/a/file.tar.gz`
+The syntax is relatively straightforward: `wget https://some/link/to/a/file.tar.gz`
 
 ```
 [remote]$ wget https://epcced.github.io/hpc-intro/files/cfd.tar.gz
@@ -85,7 +85,7 @@ Or perhaps we're simply not sure which files we want to tranfer yet.
 Let's connect to a remote system using `sftp`, you'll notice it works the same way as SSH:
 
 ```
-sftp yourUsername@login.cirrus.ac.uk
+[local]$ sftp yourUsername@login.cirrus.ac.uk
 ```
 {: .bash}
 
@@ -131,7 +131,7 @@ sftp> pwd
 ```
 {: .bash}
 ```
-Remote working directory: /lustre/home/y14/yourUsername
+Remote working directory: /lustre/home/y15/yourUsername
 ```
 {: .output}
 
@@ -158,7 +158,7 @@ sftp> put input.dat
 ```
 {: .bash}
 ```
-Uploading input.dat to /lustre/home/y14/yourUsername/input.dat
+Uploading input.dat to /lustre/home/y15/yourUsername/input.dat
 input.dat                                   100% 2000KB  11.0MB/s   00:00
 ```
 {: .output}
@@ -170,8 +170,8 @@ sftp> get input.dat
 ```
 {: .bash}
 ```
-Fetching /lustre/home/y14/yourUsername/input.dat to input.dat
-/lustre/home/y14/yourUsername/input.dat                               100% 2000KB  11.0MB/s   00:00
+Fetching /lustre/home/y15/yourUsername/input.dat to input.dat
+/lustre/home/y15/yourUsername/input.dat                               100% 2000KB  11.0MB/s   00:00
 ```
 {: .output}
 
@@ -184,7 +184,7 @@ sftp> put -r data/
 ```
 {: .bash}
 ```
-Uploading content/ to /lustre/home/y14/yourUsername/data
+Uploading content/ to /lustre/home/y15/yourUsername/data
 Entering content/
 ntering data/
 data/data11.dat                                 100%  100KB   8.4MB/s   00:00    
@@ -225,7 +225,7 @@ To quit, we type `exit` or `bye`.
 ## Transferring files interactively with FileZilla (sftp)
 
 FileZilla is a cross-platform client for downloading and uploading files to and from a remote computer.
-It is absolutely fool-proof and always works quite well.
+It is absolutely fool-proof(!) and always works quite well.
 In fact, it uses the exact same protocol as `sftp` under the hood.
 If `sftp` works, so will FileZilla!
 
@@ -260,7 +260,7 @@ If we are transferring large amounts of data then there are some additional thin
 into account in terms of performance and being considerate to other users on the system. We will
 talk about these later in the lesson...
 
-## Some additional notes...
+## Some additional notes...
 
 > ## Working with Windows
 > When you transfer text files to from a Windows system to a Unix system 

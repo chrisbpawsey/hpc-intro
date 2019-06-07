@@ -85,7 +85,12 @@ Or perhaps we're simply not sure which files we want to tranfer yet.
 Let's connect to a remote system using `sftp`, you'll notice it works the same way as SSH:
 
 ```
-[local]$ sftp yourUsername@login.cirrus.ac.uk
+[local]$ sftp yourUsername@hcplogin1.hartree.stfc.ac.uk
+```
+{: .bash}
+or 
+```
+[local]$ sftp yourUsername@hcplogin2.hartree.stfc.ac.uk
 ```
 {: .bash}
 
@@ -238,7 +243,7 @@ When you connect to the cluster, your cluster files will appear on the right han
 To connect to the cluster, 
 we'll just need to enter our credentials at the top of the screen:
 
-* Host: `sftp://login.cirrus.ac.uk`
+* Host: `sftp://hpclogin1.hartree.stfc.ac.uk`
 * User: Your username
 * Password: Your password
 * Port: (leave blank to use the default port)

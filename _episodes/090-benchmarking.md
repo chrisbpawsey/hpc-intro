@@ -19,11 +19,11 @@ doing what you expect (data files are in the right place, etc. ).  You want to s
 to run on your local HPC resource, using the "scheduler", however you are not sure resources you should
 request. Specifically what resources do you need initially and for parallel applicatiosns.
 
-Remember the basic resources that are mananged by the scheduler on a HPC system are the *number of nodes* (also referred to as "CHUNKS" in PBSpro) and the *walltime* which is how long do you want to use them.
+Remember the basic resources that are mananged by the scheduler on a HPC system are the *number of nodes*  and the *walltime* which is how long do you want to use them.
 
 This leads us to a number of questions:
-- "How do I do this in PBSpro?"
-- "What size "CHUNK" should you request?"
+- "How do I do this in LSF?"
+- "What size should you request?"
 - "How much wall time do I need to specify for the 'CHUNK' you requested?"
 - "How does any of this relate to benchmarking?"
 
@@ -107,74 +107,55 @@ for what size CHUNK you should be requesting and able to extrapolate what the ru
 It is a good practice as well to run the same benchmark 3 times as it helps to insure you have consistent performance data. 
   
 
-## PBSpro Resource
-There are lot of different [PBSpro directives][1] that you will need to understand but 
+## LSF Resource
+There are lot of different [LSF directives][1] that you will need to understand but 
 we will focus on how to do use very basic "#PBS -l" resource requests
 specifically for benchmarking.
 ```
-    #PBS -l walltime=hh:mm:ss    
-    #PBS -l place=[arrangement][:sharing][:grouping]
-    #PBS -l select=[N:][chunk specification][+[N:]chunk specification]
+    #BSUB -W hh:mm
+    #BSUB -n <number of cores>
+    #BSUB -R "span=[ptile=<number of MPI tasks>]"
+   
 ```
 {: .bash}
 
-#### -l walltime
+#### -W walltime
 Ideally you have run your application someplace and have some idea about how long it
 takes to run a job, ie  your laptop.  That would be a suitable starting time.
 ```
-   #PBS -l walltime=01:00:00
+   #BSUB -W 01:00
 ```
 {: .bash}
 
-#### -l place
-
- - arrangement - free
- - sharing - excl
+#### -x exclusive
 
 ```
-   #PBS -l place=free:excl
+   #BSUB -x 
 ```
 {: .bash}
- 
-The arrangement can matter especially with MPI applications, due to inter-node communications, 
-so you might want to experiment with *scatter* to see how the behavior affects runtimes.
+
 With benchmarking you want to run exclusively on the resource, your jobs maybe in the 
 queue a bit longer but you don't want any resource contention when benchmarking.
 
-#### -l select
+#### -a 
 This is the complicate one as it is dependent on your code, and the best advice is to 
 read the documentation about the HPC systems.   
 For simple mpi codes:
   To get 16 cores/MPI tasks
 
 ```
-   #PBS -l select=2:ncpus=8:mpiprocs=8
+   #BSUB -n 16
+   #BSUB -R "span[ptile=16]"
 ```
 {: .bash}
 
 To get 24 cores/MPI tasks across two nodes
 
 ```
-   #PBS -l select=2:ncpus=12:mpiprocs=12
+   #BSUB -n 24
+   #BSUB -R "span[ptile=12]"
 ```
 {: .bash}
-
-In both examples I have selected 2 chunks the first one as 8 mpiprocs the second has 12 mpiprocs.
-The ncpus requested should be equal to the mpiprocs.
-
-For simple openMP codes. 
-To use 6 ompthreads
-```
-    #PBS -l select=1:ncpus6:ompthreads=6
-```
-{: .bash}
-
-For hybrid MPI/openMP codes.
-```
-   #PBS -l select=2:ncpus=12:mpiprocs=1:ompthreads=12
-```
-{: .bash}
-This example has 2 nodes each with 12 cores, 1 core on each node handles the MPI and all 12 cores on each node has an openMP thread.
 
 ## Benchmarking and scalability
 
@@ -190,12 +171,12 @@ See ["Measuring Parallel Scaling Performance"][2] from SHARCNET in Canada they h
 - be cautious about benchmarking you can burn through your allocation quickly!
 - the best advice is be a domain expert with you application and to read the 
   documentation about the HPC systems.  
-- Benchmarking is important! It can help you improve you and your group understand 
-  the applications and tools you need to do better science!  
+- Benchmarking is important! It can help you improve you and your group's understanding of  
+  the applications and tools you need to do your science!  
 
 
 #### References
 
-[1]: https://pbsworks.com/pdfs/PBSUserGuide14.2.pdf
+[1]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_users_guide/job_submit.html
 [2]: https://www.sharcnet.ca/help/index.php/Measuring_Parallel_Scaling_Performance
 

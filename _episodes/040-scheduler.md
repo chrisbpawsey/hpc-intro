@@ -22,19 +22,9 @@ How do we ensure that a task is run with the resources it needs?
 This job is handled by a special piece of software called the scheduler.
 On an HPC system, the scheduler manages which jobs run where and when.
 
-> ## Job scheduling roleplay
-> 
-> Your instructor will divide you into groups taking on 
-> different roles in the cluster (users, compute nodes 
-> and the scheduler).  Follow their instructions as they 
-> lead you through this exercise.  You will be emulating 
-> how a job scheduling system works on the cluster.  
-> 
-> [Notes for the instructor here](../guide)
-{: .challenge}
 
-The scheduler used in this lesson is PBS Pro.
-Although PBS Pro is not used everywhere, 
+The scheduler used in this lesson is LSF.
+Although LSF is not used everywhere, 
 running jobs is quite similar regardless of what software is being used.
 The exact syntax might change, but the concepts remain the same.
 
@@ -62,52 +52,48 @@ In this case, the job we want to run is just a shell script. Let's create a demo
 If you completed the previous challenge successfully, 
 you probably realize that there is a distinction between 
 running the job through the scheduler and just "running it".
-To submit this job to the scheduler, we use the ``qsub`` command
+To submit this job to the scheduler, we use the ``bsub`` command
 (assuming our script is called *example-job.sh*):
 
 ``` 
-[remote]$ qsub -q <ResID> -A y15 example-job.sh
+[remote]$ bsub -q panther -n 1 -W 00:02 ./example-job.sh
 ```
 {: .bash}
 ```
-318747.indy2-login0
+Job <123456789> is submitted to queue <panther>.
 ```
 {: .output}
 
-(We have to specify a *budget* to charge our jobs time to; this is what the ``-A y15``
-option is for. Your Instructor will tell you if you need to use a different budget code.)
 
 And that's all we need to do to submit a job.  Our work is done -- now the 
 scheduler takes over and tries to run the job for us.  While the job is waiting 
 to run, it goes into a list of jobs called the *queue*.
 
-To check on our job's status, we check the queue using the command ``qstat``.
+To check on our job's status, we check the queue using the command ``bjobs``.
 
 ```
-[remote]$ qstat -u yourUsername
+[remote]$ bjobs
 ```
 {: .bash}
 ```
+rrb67-mxf04:hcplogin4 >bjobs
+JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME
+1422    rrb67-m RUN   paragon    hcplogin4   tpge110.clu *0.cluster Jun  5 18:37
 
-indy2-login0: 
-                                                            Req'd  Req'd   Elap
-Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
---------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319011.indy2-lo user     workq    example-jo  21884   1   1    --  96:00 R 00:00
 ```
 {: .output}
 
-We can see all the details of our job, most importantly that it is in the "R" (Running) state.
-Sometimes our jobs might need to wait in a queue, "Q" (Queued) state or have an error.
+We can see all the details of our job, most importantly that it is in the "RUN" (Running) status.
+Sometimes our jobs might need to wait in a queue, "PEND" (Queued or PENDING) state or have an error.
 The best way to check our job's status is with ``qstat``.
-Of course, running ``qstat`` repeatedly to check on things can be a little tiresome.
+Of course, running ``bjobs`` repeatedly to check on things can be a little tiresome.
 To see a real-time view of our jobs, we can use the ``watch`` command.
 ``watch`` reruns a given command at 2-second intervals. 
 Let's try using it to monitor another job.
 
 ```
-[remote]$ qsub -q <ResID> -A y15 example-job.sh
-[remote]$ watch qstat -u yourUsername
+rrb67-pxs01:hcplogin2 > bsub -q panther -n 1 -W 00:03 example-job.sh
+rrb67-pxs01:hcplogin2 > watch bjobs
 ```
 {: .bash}
 
@@ -121,12 +107,24 @@ You may be wondering where the output from your job goes. When you type the `hos
 at the terminal the output comes straight back to you, but a job cannot do this as you may not 
 even be logged in when the job runs.
 
-By default, each PBS job creates two files based on the job script name; one with `.o` and the
+By default, each LSF job should create two files based on the job script name; one with `.o` and the
 job ID appended and one with `.e` and the job ID appended. For the job we submitted above, with
-the script called `example-job.sh` and the job ID `319011`, PBS will create the files:
+the script called `example-job.sh` and the job ID `319011`. 
 
 - example-job.sh.o319011
 - example-job.sh.e319011
+
+But as you have just discovered you don't get any output! This is because LSF is not configured
+here at the Hartree Centre to create both the ``default`` standard output or standard error files:
+
+So the is why you get no output from the job you just tried to run!
+You have to use this instead.
+
+```
+rrb67-pxs01:hcplogin2 > bsub -q panther -n 1 -W 00:03 -o test%J.o -e example-job.sh.e%J example-job.sh
+rrb67-pxs01:hcplogin2 > watch bjobs
+```
+{: .bash}
 
 These files contain the output that would have been printed to the terminal if you used the commands
 in the job script interactively rather than in a batch job. The `.o` file contains output
@@ -139,11 +137,96 @@ It is usually a good idea to check the contents of the `.e` file to see if anyth
 your job (although, more often, people actually check the expected output and then only go and 
 check for errors if something looks odd!).
 
+## What just happened!!!  DUDE WHERE ARE MY FILES???
+
+Here is image of the files system here at the Hartree, does that help???
+
+![The Hartree Centre Network Original Design](../fig/HC_network.png)
+
+Hmmmm thought not, what happened is that this file/network system is really awkward.
+You actually have hidden home directories. So each compute cluster has it's own home directory.
+
+So you probably just want to me to tell you where your files are by now.  Okay but careful what you wish for!!!
+
+cd /gpfs/panther/local/.....<your project id>/userid/....
+
+echo $HOME
+and just change fairthorpe to panther
+that is your home directory on panther you should find 
+
+- test#####.o 
+- example-job.sh.e#####
+
+so you should cat the test#####.o and see the output of you job so we can move on...getting behind schedule.
+
+## What do you mean it could not find the example-job.sh????
+
+That is correct because your script is in your ``HOME`` directory on the login nodes and not in the ``HOME`` directory on Panther's SCRATCH filesystem.  
+
+Okay so all we have to do is move the example-job.sh to the ``HOME`` directory on Panther's SCRATCH filesystem.
+
+![](../fig/simples.jpg)
+
+So to run a script like this we have to do everything from the ``HOME`` directory on Panther's SCRATCH filesystem.
+You have to manually stage the data and executable(s) to the SCRATCH filesystem and submit the job from there!
+So is there a better way? YES. But copy the example.sh script to Panther SCRATCH then cd to that folder.
+Submit the same command and this time you should get the test####.o and test####.e  files.  In HPC this is commonly referred to your ``dot O`` and ``dot E`` files.
+
+```
+rrb67-mxf04:hcplogin4 >more test1436.o 
+Sender: LSF System <lsfadmin@tpge112.cluster>
+Subject: Job 1436: <./example-job.sh> in cluster <pted> Done
+
+Job <./example-job.sh> was submitted from host <hcplogin4> by user <rrb67-mxf04> in cluster <fairted> at Wed Jun  5 20:27:40 2019.
+Job was executed on host(s) <tpge112.cluster>, in queue <fairted>, as user <rrb67-mxf04> in cluster <pted> at Wed Jun  5 20:27:40 2019.
+</gpfs/paragon/local/HCI009/mxf04/rrb67-mxf04> was used as the home directory.
+</gpfs/paragon/local/HCI009/mxf04/rrb67-mxf04> was used as the working directory.
+Started at Wed Jun  5 20:27:40 2019.
+Terminated at Wed Jun  5 20:28:12 2019.
+Results reported at Wed Jun  5 20:28:12 2019.
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+./example-job.sh
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.04 sec.
+    Max Memory :                                 5 MB
+    Average Memory :                             1.00 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   42 sec.
+    Turnaround time :                            32 sec.
+
+The output (if any) follows:
+
+This script is running on:
+tpge112
+
+
+PS:
+
+Read file <test1436.e> for stderr output of this job.
+
+```
+{: .output}
+
+The test####.file should be empty!!
+
 ## Customizing a job
 
 The job we just ran used all of the scheduler's default options.
 In a real-world scenario, that's probably not what we want.
-The default options represent a reasonable default.
+The default options should represent a reasonable default.
 Chances are, we will need more cores, more memory, more time, 
 among other special considerations.
 To get access to these resources we must customize our job script.
@@ -152,60 +235,13 @@ Comments in Unix (denoted by `#`) are typically ignored.
 But there are exceptions.
 For instance the special `#!` comment at the beginning of scripts
 specifies what program should be used to run it (typically `/bin/bash`).
-Schedulers like PBS Pro also have a special comment used to denote special 
-scheduler-specific options,
+Schedulers like LSF also have a special comment used to denote special 
+scheduler-specific options or `Directives`
 though these comments differ from scheduler to scheduler.
-PBS Pro's special comment is `#PBS`.
-Anything following the `#PBS` comment is interpreted as an instruction to the scheduler.
+LSF's special comment is `#BSUB`.
+Anything following the `#BSUB` comment is interpreted as an instruction to the scheduler.
 
-Let's illustrate this by example. 
-By default, a job's name is the name of the script,
-but the `-N` option can be used to change the name of a job.
 
-Submit the following job (`qsub -q <ResID> -A y15 example-job.sh`):
-
-```
-#!/bin/bash
-#PBS -N new_name
-
-echo 'This script is running on:'
-hostname
-sleep 120
-```
-
-```
-[remote]$ qstat -u yourUsername
-```
-{: .bash}
-```
-indy2-login0: 
-                                                            Req'd  Req'd   Elap
-Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
---------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319011.indy2-lo user     workq    new_name   21884   1   1    --  96:00 R 00:00
-```
-{: .output}
-
-Fantastic, we've successfully changed the name of our job!
-
-One consequence of changing the name of the job is to change the name of the `.o`
-and `.e` files produced by PBS. Now they are the job name appended by `.o`/`.e` and
-the job ID rather than the script name. In this case they will be:
-
-- new_name.o319011
-- new_name.e319011
-
-> ## Setting up email notifications
-> 
-> Jobs on an HPC system might run for days or even weeks.
-> We probably have better things to do than constantly check on the status of our job
-> with `qstat`.
-> Looking at the documentation for `qsub` (use `man qsub`, `Space` to scroll down,
-> `u` to scroll up, `q` to exit)
-> can you set up our test job to send you an email when it finishes?
-> 
-> Hint: you will need to use the `-m` and `-M` options.
-{: .challenge}
 
 ### Resource requests
 
@@ -217,12 +253,11 @@ If you do not specify requirements (such as the amount of time you need),
 you will likely be stuck with your site's default resources,
 which is probably not what we want.
 
-The following PBS options show how to control resource requests:
+The following LSF options show how to control resource requests:
 
-- `-l select=<nnodes>:ncpus=<cores per node>` - how many nodes and cores per node does your job need? 
-- `-l walltime=<hours:minutes:seconds>` - How much real-world time (walltime) will your job take to run?
-- `-l place=scatter:excl` - For parallel jobs, how to distribute the processors across compute nodes
-   (required on Cirrus when you run parallel jobs).
+- `-n <total number of physical cores>` - how many nodes and cores per node does your job need? 
+- `-W walltime=<hours:minutes>` - How much real-world time (walltime) will your job take to run?
+- `-R "span[ptile=<number of MPI tasks per node>]" - The max is 16!
 
 Note that just *requesting* these resources does not make your job run faster!  We'll 
 talk more about how to make sure that you're using resources effectively in a later 
@@ -230,94 +265,29 @@ episode of this lesson.
 
 > ## Submitting resource requests
 >
-> Submit a job that will use 2 nodes, 36 cores per node, and 5 minutes of walltime.
+> Submit a job that will use 2 nodes, 16 cores per node, and 5 minutes of walltime.
 {: .challenge}
 
-> ## Job environment variables (compute nodes)
->
-> When PBS runs a job, it sets a number of environment variables for the job.
-> One of these will let us check which compute nodes have been assigned to our job.
-> The `PBS_HOSTFILE` variable is set to the name of the file containing the list of
-> compute nodes assigned to our job.
-> Using the `PBS_HOSTFILE` variable, 
-> modify your job so that it prints the list of compute nodes assigned to our job.
-{: .challenge}
-
-> ## Job environment variables (directory)
->
-> A key job enviroment variable in PBS is `PBS_O_WORKDIR` that contains the path of
-> the directory from which the job was submitted. To understand why this is important
-> modify your job submission script to print out the directory that it runs in by 
-> default by using the `pwd` command (this prints the current working directory).
->
-> Now, use the `PBS_O_WORKDIR` environment within your job script to make sure that 
-> the commands you are using run in the directory that you submitted the job from
-> and verify that this has worked using `pwd` again.
-{: .challenge}
-
-You almost always want your job scipt to execute as if it was in the directory from
-which the job was submitted so you will generally make sure you use the `PBS_O_WORKDIR`
-environment variable in all your job scripts. If you encounter errors with files or
-executables not being found it is often worth checking that the job script is executing
-in the location you expect!
 
 Resource requests are typically binding. If you exceed them, your job will be killed.
 Let's use walltime as an example.  We will request 30 seconds of walltime, 
 and attempt to run a job for two minutes.
 
-```
-#!/bin/bash
-#PBS -N timeout
-#PBS -l walltime=0:0:30
-
-echo 'This script is running on:'
-hostname
-sleep 120
-```
-
-Submit the job and wait for it to finish. 
-Once it is has finished, check the `.e` (stderr) file.
-```
-[remote]$ qsub -q <ResID> -A y15 timeout.sh
-[remote]$ watch qstat -u yourUsername
-[remote]$ cat timeout.e319076 
-```
-{: .bash}
-```
-=>> PBS: job killed: walltime 49 exceeded limit 30
-```
-{: .output}
-
-Our job was killed for exceeding the amount of resources it requested.
-Although this appears harsh, this is actually a feature.
-Strict adherence to resource requests allows the scheduler to find the best possible place
-for your jobs.
-Even more importantly, 
-it ensures that another user cannot use more resources than they've been given.
-If another user messes up and accidentally attempts to use more time than they have been 
-allocated PBS will kill the job. Other jobs will be unaffected.
-This means that one user cannot mess up the experience of others,
-the only jobs affected by a mistake in scheduling will be their own.
-
 ## Cancelling/deleting a job
 
 Sometimes we'll make a mistake and need to cancel/delete a job.
-This can be done with the `qdel` command.
+This can be done with the `bkill` command.
 Let's submit a job and then cancel it using its job number.
-
 ```
-[remote]$ qsub -q <ResID> -A y15 example-job.sh
-[remote]$ qstat -u yourUsername
+rrb67-pxs01:hcplogin2 > bsub -q panther -n 1 -W 00:03 -o test%J.o -e example-job.sh.e%J example-job.sh
+rrb67-pxs01:hcplogin2 > watch bjobs
 ```
 {: .bash}
-```
-319078.indy2-login0
 
-indy2-login0: 
-                                                            Req'd  Req'd   Elap
-Job ID          Username Queue    Jobname    SessID NDS TSK Memory Time  S Time
---------------- -------- -------- ---------- ------ --- --- ------ ----- - -----
-319078.indy2-lo user     workq    example-jo   3567   1   1    --  96:00 R 00:00
+```
+JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME   FINISH_TIME
+1436    rrb67-m RUN   paragon    hcplogin4   tpge112.clu *le-job.sh Jun  5 20:27  Jun  5 20:37 L
+
 ```
 {: .output}
 
@@ -325,8 +295,8 @@ Now cancel the job with it's job number.
 Absence of any job info indicates that the job has been successfully canceled.
 
 ```
-[remote]$ qdel 319078
-[remote]$ qstat -u yourUsername
+[remote]$ bkill 1436
+[remote]$ bjobs
 ```
 {: .bash}
 ```
@@ -337,74 +307,23 @@ Absence of any job info indicates that the job has been successfully canceled.
 ## Other types of jobs
 
 Up to this point, we've focused on running jobs in batch mode.
-PBS also provides the ability to run tasks as a one-off or start an interactive session.
-
-There are very frequently tasks that need to be done semi-interactively.
-Creating an entire job script might be overkill, 
-but the amount of resources required is too much for a login node to handle.
-A good example of this might be building a genome index for alignment with a tool like [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml).
-Fortunately, we can run these types of tasks as a one-off with `qsub --`.
-
-`qsub --` runs a single command on the compute nodes and then exits.
-Let's demonstrate this by running the `hostname` command with `qsub --`.
-(We can delete a `qsub --` job using `qdel` as described above.)
-
-```
-[remote]$ qsub -q <ResID> -A y15 -- /bin/hostname
-[remote]$ cat STDIN.o319085
-```
-{: .bash}
-```
-319085.indy2-login0
-
-r1i3n0
-```
-{: .output}
-
-Note that, unlike when we use it on the interactive command line, we had
-to provide the full path to the command: `/bin/hostname` rather than `hostname`.
-This is because the PBS environment inside this job does not contain the information
-to find the command. You can find the full path of a command by using the `which` 
-command:
-
-```
-[remote]$ which hostname
-```
-{: .bash}
-```
-/bin/hostname
-```
-{: .output}
-
-`qsub --` accepts all of the same options as `qsub`.
-However, instead of specifying these in a script, 
-these options are specified on the command-line when starting a job.
-To submit a job that uses 2 nodes (36 cores per node) for instance, 
-we could use the following command
-
-```
-[remote]$ qsub -l select=2:ncpus=36 -l place=scatter:excl -q <ResID> -A y15 -- /bin/echo "This job will use 2 nodes."
-```
-{: .bash}
-```
-This job will use 2 nodes.
-```
-{: .output}
+LSF also provides the ability to run tasks as a one-off or start an interactive session.
 
 ### Interactive jobs
 
 Sometimes, you will need a lot of resource for interactive use.
 Perhaps it's our first time running an analysis 
 or we are attempting to debug something that went wrong with a previous job.
-Fortunately, we can start an interactive job with `qsub`:
+Fortunately, we can start an interactive job with `bsub`:
 
 ```
-[remote]$ qsub -I -q <ResID> -A y15
-```
+[remote]$ bsub -Is -q pantherI /bin/bash
 {: .bash}
 ```
-qsub: waiting for job 319086.indy2-login0 to start
-qsub: job 319086.indy2-login0 ready
+rrb67-mxf04:hcplogin4 > bsub -Is -q paragonI -W 00:10   /bin/bash
+Job <1438> is submitted to queue <paragonI>.
+<<Waiting for dispatch ...>>
+
 
 [compute]$ 
 ```
@@ -413,7 +332,7 @@ qsub: job 319086.indy2-login0 ready
 You should be presented with a bash prompt.
 Note that the prompt will likely change to reflect your new location, 
 in this case the compute node we are logged onto.
-You can also verify this with `hostname`.
+You can also verify this with `hostname` and/or `pwd`
 
 When you are done with the interactive job, type `exit` to quit your session.
 

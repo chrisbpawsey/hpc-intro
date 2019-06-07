@@ -99,8 +99,8 @@ For those logging in with PuTTY it would likely be best to cover the terminal ba
 
 With all of this in mind, let's connect to a cluster. 
 
-For this lesson, we will use [Cirrus](http://www.cirrus.ac.uk) - an HPC system located at [EPCC](http://www.epcc.ed.ac.uk).
-Although it's unlikely that every system will be exactly like Cirrus, it's a good example of what you can expect from an HPC system.
+For this lesson, we will use [Panther](http://community.hartree.stfc.ac.uk/wiki/site/admin/power8%20-%20further%20info.html) - an HPC system located at the [Hartree Centre](https://www.hartree.stfc.ac.uk/Pages/home.aspx).
+Although it's unlikely that systems elsewhere will be like Panther, the fundamental major components of what you can expect from an HPC system are there it is just a matter of how they are accessed and used.
 To connect to our example computer, we will use SSH (if you are using PuTTY, see above for instructions). 
 
 SSH allows us to connect to Linux computers remotely, and use them as if they were our own.
@@ -108,37 +108,67 @@ The general syntax of the connection command follows the format `ssh yourUsernam
 Let's attempt to connect to the HPC system now:
 
 ```
-ssh yourUsername@login.cirrus.ac.uk
+ssh yourUsername@hcplogin1.hartree.stfc.ac.uk
+
+```
+{: .bash}
+or 
+
+```
+ssh yourUsername@hcplogin2.hartree.stfc.ac.uk
 ```
 {: .bash}
 
 Your Instructor will give you the correct username to use in place of "yourUsername".
 
 ```{.output}
-The authenticity of host 'login.cirrus.ac.uk (129.215.175.28)' can't be established.
-ECDSA key fingerprint is SHA256:JRj286Pkqh6aeO5zx1QUkS8un5fpcapmezusceSGhok.
-ECDSA key fingerprint is MD5:99:59:db:b1:3f:18:d0:2c:49:4e:c2:74:86:ac:f7:c6.
-Are you sure you want to continue connecting (yes/no)? # type "yes"!
-Warning: Permanently added the ECDSA host key for IP address '129.215.175.28' to the list of known hosts.
-yourUsername@login.cirrus.ac.uk password:  # no text appears as you enter your password
-Last login: Mon Jun 18 16:21:52 2018 from cpc102380-sgyl38-2-0-cust601.18-2.cable.virginm.net
-================================================================================
-
-Cirrus HPC Service
-
---------------------------------------------------------------------------------
-This is a private computing facility. Access to this system is limited to those
-who have been granted access by the operating service provider on behalf of the
-issuing authority and use is restricted to the purposes for which access was
-granted. All access and usage are governed by the terms and conditions of access
-agreed to by all registered users and are thus subject to the provisions of the
-Computer Misuse Act, 1990 under which unauthorised use is a criminal offence.
---------------------------------------------------------------------------------
-
-For help please contact the Cirrus helpdesk at: 
-support@cirrus.ac.uk
-
-================================================================================
+1@hcplogin2.hartree.stfc.ac.uk's password: 
+Warning: No xauth data; using fake authentication data for X11 forwarding.
+Last failed login: Wed Jun  5 17:06:24 BST 2019 from 193.62.120.140 on ssh:notty
+There was 1 failed login attempt since the last successful login.
+Last login: Tue Jun  4 08:16:18 2019 from host86-133-141-225.range86-133.btcentralplus.com
+##########################################################################
+##                                                                      ##
+##                  Upcoming Maintenance Sessions                       ##
+##                                                                      ##
+##                  Start: Jun 05 2019 08:00                            ##
+##                  End:   Jun 05 2019 18:00                            ##
+##                                                                      ##
+##                  Start: Jun 19 2019 08:00                            ##
+##                  End:   Jun 19 2019 18:00                            ##
+##                                                                      ##
+##########################################################################
+##                                                                      ##
+## Notice 2018-09-06:                                                   ##
+##                                                                      ##
+## With effect from Monday 10th September, there will be a run time     ##
+## limit of 120 minutes on the Paragon interactive queue. Interactive   ##
+## nodes will be available from 08:00 - 18:00 Mon - Thurs and           ##
+## 08:00 - 12:00 Fri. The interactive nodes will be made available to   ##
+## the batch queues at all other times.                                 ##
+##                                                                      ##
+##########################################################################
+##                                                                      ##
+##   System status info:                                                ##
+##                                                                      ##
+##   https://stfc.service-now.com                                       ##
+##                                                                      ##
+##########################################################################
+##                                                                      ##
+## Disk quotas on /gpfs/fairthorpe                                      ##
+##                                                                      ##
+## Home directories in /gpfs/fairthorpe are quota enforced, having      ##
+## soft and hard limits of 100 MB and 110 MB, respectively. These       ##
+## directories are only intended for the storage of configuration files ##
+## ('dot' files), ssh keys and scripts. The CDS filesystem should be    ##
+## for the storage of all data files.                                   ##
+##									##
+## Your current quota and usage can be queried by simply issuing the    ##
+## command "quota". Add the "-s" flag for human friendly output. Note   ##
+## that the name of the remote filesystem will be reported, rather than ##
+## the local mountpoint.                                                ##
+##									##
+##########################################################################
 ```
 
 If you've connected successfully, you should see a prompt like the one below. 
@@ -148,7 +178,8 @@ in this case `[yourUsername@computerName workingDirectory]$`.
 We will cover things in depth as we explore the system further.)
 
 ```{.output}
-[yourUsername@cirrus-login0 ~]$
+yourUsername:hcplogin2 >
+
 ```
 
 ## Telling the Difference between the Local Terminal and the Remote Terminal
@@ -186,7 +217,7 @@ the following convention:
 
 ## Examining the nodes
 
-Now we can log into the Cirrus HPC system we will look at the nodes. You should remember that there 
+Now we can log into the Panther HPC system we will look at the nodes. You should remember that there 
 are at least two  types of node on the system: *login nodes* and *compute nodes*.
 
 We can use the `lscpu` command to print information on the processors on the login nodes to the terminal:
@@ -196,38 +227,34 @@ We can use the `lscpu` command to print information on the processors on the log
 ```
 {: .bash}
 ```
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
+hcplogin2 >lscpu
+Architecture:          ppc64le
 Byte Order:            Little Endian
-CPU(s):                72
-On-line CPU(s) list:   0-71
-Thread(s) per core:    2
-Core(s) per socket:    18
+CPU(s):                128
+On-line CPU(s) list:   0-127
+Thread(s) per core:    8
+Core(s) per socket:    8
 Socket(s):             2
 NUMA node(s):          2
-Vendor ID:             GenuineIntel
-CPU family:            6
-Model:                 79
-Model name:            Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz
-Stepping:              1
-CPU MHz:               1199.953
-BogoMIPS:              4205.47
-Virtualization:        VT-x
-L1d cache:             32K
+Model:                 2.0 (pvr 004d 0200)
+Model name:            POWER8 (raw), altivec supported
+L1d cache:             64K
 L1i cache:             32K
-L2 cache:              256K
-L3 cache:              46080K
-NUMA node0 CPU(s):     0-17,36-53
-NUMA node1 CPU(s):     18-35,54-71
-```
+L2 cache:              512K
+L3 cache:              8192K
+NUMA node0 CPU(s):     0-63
+NUMA node8 CPU(s):     64-127
+
 {: .output}
 
 We can get some useful information from this output:
 
-* The processor model is:  Intel(R) Xeon(R) CPU E5-2695 v4 @ 2.10GHz (you could use [Intel Ark](http://ark.intel.com) along with the model number to get more information if you wanted)
-* There are 18 cores per processor: ``Core(s) per socket: 18``
+* The processor model is:  POWER8 (raw), altivec supported (you could use  along with the model number to get more information if you wanted)
+* There are 8 cores (or Physical threads) per processor: ``Core(s) per socket: 8``
+* There are 8 threads per core: ``Thread(s) per core: 8``
 * There are two processors per node: ``Sockets: 2``
-* This means that there are 2 * 18 = 36 cores on the node
+* This means that there are 2 * 8 = 16 Physical cores on the node
+* There are 2 NUMA node(s) per node:`` NUMA node(s):  2``
 
 We can extract information about the amount of memory available from the `/proc/meminfo` file. In this case we only want the first line as it will give
 us the total amount of memory available so we use the ``head -1`` command:
@@ -237,11 +264,11 @@ us the total amount of memory available so we use the ``head -1`` command:
 ```
 {: .bash}
 ```
-MemTotal:       263772152 kB
+MemTotal:       1067494144 kB
 ```
 {: .output}
 
-This tells us that there are approximately 252 GB of memory available (263772152/[1024*1024] = 251.55 GB) (this is out of 256 GB, ~4GB are reserved for various parts of computing hardware).
+This tells us that there are approximately 1067 GB of memory (RAM) available on the login node.
 
 > ## Units
 > 
@@ -256,42 +283,6 @@ This tells us that there are approximately 252 GB of memory available (263772152
 > For small amounts of storage the differences between these two unit systems are negligible but as the
 > size increases the differences can be significant.
 {: .callout}
-
-We can now repeat this for the compute nodes. All interaction with the compute nodes is handled by a specialized piece of software called a scheduler
-(the scheduler used in this lesson is called PBS Pro).  We will learn more about how to use 
-the scheduler to submit jobs later, but for now, we will use it to tell us more information about 
-the compute nodes and what is available.  
-
-We are going to repeat the commands above on a compute node. To do this, we will run an *interactive job* which will give
-us access to a bash command line on a compute node. The ``qsub`` command is used to submit a job to the scheduler. Your
-instructor will tell you what to use for `<ResID>` (the reservation ID) as this will be different at each workshop:
-
-```
-[remote]$ qsub -q <ResID> -I -l select=1 -A y15
-```
-{: .bash}
-```
-qsub: waiting for job 316267.indy2-login0 to start
-qsub: job 316267.indy2-login0 ready
-
-[compute]$
-```
-{: .output}
-
-You should see your prompt change to indicate that your shell is now on a compute node rather than a login node.
-
-> ## Differences on the compute node?
-> Use the commands you saw above to determine if there are any differences between the processors and
-> memory available on the compute node compared to the login node.
->
-> Is the answer what you expected?
-{: .challenge}
-
-> ## Explore your local computer
->
-> Try to find out the processor and memory details on your own computer. How do these differ from the 
-> hardware available on the HPC system?
-{: .challenge}
 
 Now we know how to connect to the HPC system, we will next learn how to transfer data on and off the system.
 

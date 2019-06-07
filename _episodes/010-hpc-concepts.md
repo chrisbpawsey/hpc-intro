@@ -46,7 +46,7 @@ The *processor* contains multiple *compute cores* (usually shortened to *core*);
 * The power of the floating point unit (generally the more modern the processor, the more powerful the FPU is)
 * The number of cores available (12-16 cores are typical on modern processors)
 
-Often, HPC nodes have multiple processors (usually 2 processors per node) so the number of cores available on a node is doubled (i.e. 24-26 cores per node, rather than 12-16 cores per node). This configuration can have implications for performance.
+Often, HPC nodes have multiple processors (usually 2 processors per node) so the number of cores available on a node is doubled (i.e. 24-32 cores per node, rather than 12-16 cores per node). This configuration can have implications for performance.
 
 Each node also has a certain amount of *memory* available (also referred to as *RAM* or *DRAM*) in addtion to the processor memory caches. Modern compute nodes typically have in the range 64-256 GB of memory per node.
 
@@ -98,7 +98,7 @@ A few properties of HPC systems mean that you often need to modify your computat
 
 ## ...and what about Performance
 
-The "P" in HPC does stand for performance and the make up of an HPC system is designed to allow researchers to access higher performance (or capabilities) than they could on their local systems. The way in which an HPC system is put together does have an impact on performance and workfows are often categorised according to which part of the HPC system constrains their performance. You may see the following terms used to describe performance on an HPC system:
+The "HP" in HPC does stand for high performance and the make up of an HPC system is designed to allow researchers to access higher performance (or capabilities) than they could on their local systems. The way in which an HPC system is put together does have an impact on performance and workfows are often categorised according to which part of the HPC system constrains their performance. You may see the following terms used to describe performance on an HPC system:
 
 * **Compute bound.** The performance of the workflow is limited by the floating point (FPU) performance of the nodes. This is typically seen when peforming math-heavy operations such as diagonalising matrices in computational chemistry software or computing pairwise force interactions in biomolecular simulations.
 * **Memory bound.** The performance of the workflow is limited by access to memory (usually in terms of *bandwidth*: how much data can you access at one time). Almost all current HPC applications have a part of their workflow that is memory bound. A typical example of a memory bound application would be something like computational fluid dynamics.

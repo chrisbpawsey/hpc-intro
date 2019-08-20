@@ -2,6 +2,7 @@
 
 This lesson is focused on teaching the basics of high-performance computing (HPC).
 
+
 ## Lesson writing instructions
 
 This is a fast overview of the Software Carpentry lesson template. 
